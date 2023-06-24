@@ -5,31 +5,29 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   context: path.resolve(__dirname, './src'),
   entry: path.join(__dirname, 'src', 'index.ts'),
+  resolve: {
+    extensions: ['.ts', '.js', '.json'],
+  },
   output: {
-    path: path.join(__dirname, 'dist'),
-    clean: true,
     filename: 'index.[contenthash:8].js',
+    path: path.join(__dirname, 'dist'),
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
+      { test: /\.ts$/i, use: 'ts-loader' },
       {
         test: /\.(scss|css)$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.(png|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
         type: 'asset/resource',
         generator: {
           filename: path.join('assets', 'img', '[name].[contenthash:8][ext]'),
         },
       },
       {
-        test: /\.(svg|ico)$/,
+        test: /\.(ico)$/,
         type: 'asset/resource',
         generator: {
           filename: path.join('assets', 'icons', '[name].[contenthash:8][ext]'),
