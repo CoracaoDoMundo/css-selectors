@@ -4,4 +4,5 @@ export interface Icon {
   viewBox: string;
   path: string;
   pathSecond?: string;
-};
+}
+

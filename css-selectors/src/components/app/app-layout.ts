@@ -1,33 +1,23 @@
 import './app.css';
 import { Icon } from '../../types/index';
 import blanket from '../../assets/img/blanket.svg';
+import { createElement } from '../service-functions';
 
 class AppLayout {
-  draw() {
+  public levelHeader: HTMLHeadingElement = document.createElement('h1');
+  public blanket: HTMLDivElement = document.createElement('div');
+
+  draw(): void {
     this.drawGameBlock();
-    const levelsBlock: HTMLDivElement = document.createElement('div');
-    levelsBlock.classList.add('levelsBlock');
-    document.body.append(levelsBlock);
+    const levelsBlock: HTMLDivElement = createElement('div', ['levelsBlock'], document.body);
   }
 
-  drawGameBlock() {
-    const gameBlock: HTMLDivElement = document.createElement('div');
-    gameBlock.classList.add('gameBlock');
-    document.body.append(gameBlock);
-    const headerLine: HTMLDivElement = document.createElement('div');
-    headerLine.classList.add('headerLine');
-    gameBlock.append(headerLine);
-    const header: HTMLHeadingElement = document.createElement('h1');
-    header.classList.add('header');
-    header.textContent = 'Summer CSS';
-    headerLine.append(header);
-    const socialBlock: HTMLDivElement = document.createElement('div');
-    socialBlock.classList.add('socialBlock');
-    headerLine.append(socialBlock);
-    const socialBlockText: HTMLSpanElement = document.createElement('span');
-    socialBlockText.textContent = 'Share';
-    socialBlockText.classList.add('header');
-    socialBlock.append(socialBlockText);
+  drawGameBlock(): void {
+    const gameBlock: HTMLDivElement = createElement('div', ['gameBlock'], document.body);
+    const headerLine: HTMLDivElement = createElement('div', ['headerLine'], gameBlock);
+    const header: HTMLHeadingElement = createElement('h1', ['header'], headerLine, 'Summer CSS');
+    const socialBlock: HTMLDivElement = createElement('div', ['socialBlock'], headerLine);
+    const socialBlockText: HTMLSpanElement = createElement('span', ['header'], socialBlock, 'Share');
     const mailData = {
       gQuantity: 1,
       color: '#d2922c',
@@ -55,18 +45,40 @@ class AppLayout {
     const twitterIcon: SVGSVGElement = this.renderIcon(twitterData);
     socialBlock.append(twitterIcon);
 
-    const levelHeader: HTMLHeadingElement = document.createElement('h1');
-    levelHeader.classList.add('levelHeader');
-    levelHeader.textContent = 'Select the slates';
-    gameBlock.append(levelHeader);
+    this.levelHeader.classList.add('levelHeader');
+    this.levelHeader.textContent = 'Select the slates';
+    gameBlock.append(this.levelHeader);
 
-    const blanketImg: HTMLDivElement = document.createElement('div');
-    blanketImg.classList.add('blanket');
-    blanketImg.style.backgroundImage = `url(${blanket})`;
-    gameBlock.append(blanketImg);
+    this.blanket.classList.add('blanket');
+    this.blanket.style.backgroundImage = `url(${blanket})`;
+    gameBlock.append(this.blanket);
+
+    const codeField: HTMLDivElement = createElement('div', ['codeField'], gameBlock);
+
+    const editorHeadingLine: HTMLDivElement = createElement('div', ['editorHeaderLine'], codeField);
+    const editorTitle: HTMLSpanElement = createElement('span', ['editorTitle'], editorHeadingLine, 'CSS Editor');
+    const editorSubtitle: HTMLSpanElement = createElement('span', ['subtitle'], editorHeadingLine, 'style.css');
+    const codeHeadingLine: HTMLDivElement = createElement('div', ['viewerHeaderLine'], codeField);
+    const codeViewerTitle: HTMLSpanElement = createElement('span', ['viewerTitle'], codeHeadingLine, 'HTML Viewer');
+    const codeViewerSubtitle: HTMLSpanElement = createElement('span', ['subtitle'], codeHeadingLine, 'beach.html');
+
+    const editorNumLines: HTMLDivElement = createElement('div', ['numbers', 'editorNums'], codeField);
+    for (let i = 0; i < 20; i += 1) {
+      const lineNum: HTMLSpanElement = createElement('span', ['num'], editorNumLines, (i + 1).toString(10));
+    }
+    const codingFieldBlock: HTMLDivElement = createElement('div', ['codingFieldBlock'], codeField);
+    const codeViewerNumLines: HTMLDivElement = createElement('div', ['numbers', 'viewerNums'], codeField);
+    for (let i = 0; i < 20; i += 1) {
+      const lineNum: HTMLSpanElement = createElement('span', ['num'], codeViewerNumLines, (i + 1).toString(10));
+    }
+    const inputCode: HTMLInputElement = createElement('input', ['input'], codingFieldBlock);
+    inputCode.setAttribute('placeholder', 'Type in a CSS selector');
+    const enterBtn: HTMLDivElement = createElement('div', ['btn'], codingFieldBlock);
+    const enterText: HTMLDivElement = createElement('span', ['btnText'], enterBtn, 'Enter');
+    const codeText: HTMLSpanElement = createElement('code', ['codeText'], codingFieldBlock, `{\n /* Style would go here. */ \n}`);
   }
 
-  renderIcon(data: Icon) {
+  renderIcon(data: Icon): SVGSVGElement {
     const icon: SVGSVGElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'svg'
@@ -75,11 +87,11 @@ class AppLayout {
     icon.setAttribute('viewBox', data.viewBox);
     icon.setAttribute('enable-background', 'new 0 0 64 64');
     icon.classList.add('icon');
-    let container: SVGGraphicsElement = document.createElementNS(
+    const container: SVGGraphicsElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'g'
     );
-    let containerSecond: SVGGraphicsElement = document.createElementNS(
+    const containerSecond: SVGGraphicsElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'g'
     );
