@@ -181,9 +181,20 @@
   margin: 0;
 }
 
-.codeViewerBlock {
-
+.codeViewerText {
+  color: #2d2010;
 }
+
+.codeTextContainer {
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  background: transparent;
+}
+
+/* .hljs-tag:not(:first-child):not(:last-child):hover {
+font-weight: 700;
+} */
 
 .levelsList {
   display: flex;
@@ -211,4 +222,3 @@
 .activeListItem {
   background-color: #442d0ee9;
 }
-

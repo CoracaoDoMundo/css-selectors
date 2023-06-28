@@ -53,5 +53,8 @@
     "webpack": "^5.87.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.13.3"
+  },
+  "dependencies": {
+    "highlight.js": "^11.8.0"
   }
 }
