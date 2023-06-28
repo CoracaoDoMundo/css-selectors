@@ -1,15 +1,20 @@
 import './app.css';
 import { Icon } from '../../types/index';
-import blanket from '../../assets/img/blanket.svg';
 import { createElement } from '../service-functions';
+import Levels from '../levels/levels';
+import Blanket from '../blanket/blanket';
+import Viewer from '../html-viewer/html-viewer';
 
 class AppLayout {
   public levelHeader: HTMLHeadingElement = document.createElement('h1');
-  public blanket: HTMLDivElement = document.createElement('div');
+  public levels = new Levels();
+  public blanket = new Blanket();
+  public viewerBlock = new Viewer();
 
   draw(): void {
     this.drawGameBlock();
     const levelsBlock: HTMLDivElement = createElement('div', ['levelsBlock'], document.body);
+    this.levels.drawLevelsBlock(levelsBlock);
   }
 
   drawGameBlock(): void {
@@ -49,9 +54,8 @@ class AppLayout {
     this.levelHeader.textContent = 'Select the slates';
     gameBlock.append(this.levelHeader);
 
-    this.blanket.classList.add('blanket');
-    this.blanket.style.backgroundImage = `url(${blanket})`;
-    gameBlock.append(this.blanket);
+    this.blanket.draw(gameBlock);
+    this.blanket.drawLevelItems(this.levels.activeLevel);
 
     const codeField: HTMLDivElement = createElement('div', ['codeField'], gameBlock);
 
@@ -75,7 +79,9 @@ class AppLayout {
     inputCode.setAttribute('placeholder', 'Type in a CSS selector');
     const enterBtn: HTMLDivElement = createElement('div', ['btn'], codingFieldBlock);
     const enterText: HTMLDivElement = createElement('span', ['btnText'], enterBtn, 'Enter');
-    const codeText: HTMLSpanElement = createElement('code', ['codeText'], codingFieldBlock, `{\n /* Style would go here. */ \n}`);
+    const codeText: HTMLPreElement = createElement('pre', ['codeText'], codingFieldBlock, `{\n /* Style would go here. */ \n}`);
+
+    this.viewerBlock.draw(codeField);
   }
 
   renderIcon(data: Icon): SVGSVGElement {
