@@ -183,13 +183,13 @@
 
 .codeViewerText {
   color: #2d2010;
+  background: transparent;
 }
 
 .codeTextContainer {
   display: flex;
   flex-direction: column;
   cursor: default;
-  background: transparent;
 }
 
 /* .hljs-tag:not(:first-child):not(:last-child):hover {

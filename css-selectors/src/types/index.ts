@@ -18,3 +18,11 @@ export enum levelNames {
   '*',
   'A *',
 }
+
+export interface Level {
+          selector: string,
+          class?: string,
+          id?: string,
+          target?: boolean,
+          child?: Level[]
+}

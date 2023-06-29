@@ -3,7 +3,7 @@ import { levelNames } from '../../types/index';
 
 class Levels {
     public levelsBlock: HTMLDivElement = document.createElement('div');
-    public activeLevel: number = 1;
+    public activeLevel: number = 0;
     public levelItems: HTMLDivElement[] = [];
     public levelMarks: HTMLDivElement[] = [];
 
@@ -19,7 +19,7 @@ class Levels {
           const levelMark: HTMLDivElement = createElement('div', ['levelMark',`level_${i + 1}`], levelItemBlock);
           this.levelMarks.push(levelMark);
           const lineNum: HTMLSpanElement = createElement('span', ['listItem'], levelItemBlock, `${i + 1}.  ${levelNames[i + 1]}`);
-          if (i + 1 === this.activeLevel) {
+          if (i === this.activeLevel) {
             levelItemBlock.classList.add('activeListItem');
           }
         }

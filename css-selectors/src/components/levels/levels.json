@@ -1,0 +1,71 @@
+[
+  [
+    {
+      "selector": "div",
+      "class": "blanket",
+      "child": [
+        { "selector": "slates", "target": true },
+        { "selector": "slates", "target": true }
+      ]
+    }
+  ],
+  [
+    {
+      "selector": "div",
+      "class": "blanket",
+      "child": [
+        { "selector": "slates" },
+        { "selector": "ring" },
+        { "selector": "ring", "id": "ropes", "target": true }
+      ]
+    }
+  ],
+  [
+    {
+      "selector": "div",
+      "class": "blanket",
+      "child": [
+        { "selector": "slates" },
+        {
+          "selector": "plate",
+          "child": [{ "selector": "strawberry", "target": true }]
+        },
+        { "selector": "strawberry" }
+      ]
+    }
+  ],
+  [
+    {
+      "selector": "div",
+      "class": "blanket",
+      "child": [
+        { "selector": "ring", "child": [{ "selector": "star" }] },
+        {
+          "selector": "ring",
+          "id": "ropes",
+          "child": [{ "selector": "star", "target": true }]
+        },
+        { "selector": "plate", "child": [{ "selector": "strawberry" }] }
+      ]
+    }
+  ],
+  [
+    {
+      "selector": "div",
+      "class": "blanket",
+      "child": [
+        { "selector": "glasses" },
+        {
+          "selector": "glasses",
+          "id": "hearts",
+          "target": true
+        },
+        {
+          "selector": "book",
+          "child": [{ "selector": "glasses", "id": "hearts", "target": true }]
+        },
+        { "selector": "book" }
+      ]
+    }
+  ]
+]

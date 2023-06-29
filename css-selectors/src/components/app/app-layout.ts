@@ -81,7 +81,7 @@ class AppLayout {
     const enterText: HTMLDivElement = createElement('span', ['btnText'], enterBtn, 'Enter');
     const codeText: HTMLPreElement = createElement('pre', ['codeText'], codingFieldBlock, `{\n /* Style would go here. */ \n}`);
 
-    this.viewerBlock.draw(codeField);
+    this.viewerBlock.draw(codeField, this.levels.activeLevel);
   }
 
   renderIcon(data: Icon): SVGSVGElement {
