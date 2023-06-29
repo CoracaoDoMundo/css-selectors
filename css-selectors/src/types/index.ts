@@ -4,6 +4,7 @@ export interface Icon {
   viewBox: string;
   path: string;
   pathSecond?: string;
+  pathThird?: string;
 }
 
 export enum levelNames {

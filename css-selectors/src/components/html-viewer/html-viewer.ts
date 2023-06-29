@@ -17,11 +17,11 @@ class Viewer {
   }
 
   fillViewerField(activeLevel: number) {
-    const code: HTMLSpanElement = createElement(
-      'code',
-      ['codeViewerText'],
-      this.preBlock
-    );
+    // const code: HTMLSpanElement = createElement(
+    //   'code',
+    //   ['codeViewerText'],
+    //   this.preBlock
+    // );
 
     let nesting: number = 0;
     let res = (
@@ -56,7 +56,7 @@ class Viewer {
           );
           const elemChild: HTMLDivElement = createElement(
             'div',
-            ['codeViewerText', `${el.selector}`],
+            ['childrenContainer'],
             container
           );
           const elemEnd: HTMLDivElement = createElement(

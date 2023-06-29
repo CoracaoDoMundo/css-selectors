@@ -76,7 +76,7 @@
   display: grid;
   grid-template-columns: 4% 46% 4% 46%;
   width: 85%;
-  margin-top: 20px;
+  margin: 15px 0;
   border: solid rgb(68, 45, 14) 5px;
   border-radius: 2px;
   background-color: rgb(68, 45, 14, 0.5);
@@ -192,7 +192,12 @@
   cursor: default;
 }
 
-/* .hljs-tag:not(:first-child):not(:last-child):hover {
+/* .codeViewerText:hover,
+.childrenContainer:hover {
+  background: #442d0ea2;
+  } */
+
+/* .codeViewerText:not(:first-child):not(:last-child):hover {
 font-weight: 700;
 } */
 
@@ -222,3 +227,30 @@ font-weight: 700;
 .activeListItem {
   background-color: #442d0ee9;
 }
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.ghContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ghLink,
+.year {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color:#d2922c;
+}
+
+.rsLogo {
+  background-image: url(../../assets/img/rsLogo.svg);
+  height: 20px;
+  width: 100px;
+}
+
