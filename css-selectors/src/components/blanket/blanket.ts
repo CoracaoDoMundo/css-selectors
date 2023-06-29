@@ -1,5 +1,7 @@
+import { createElement } from '../service-functions';
 import blanket from '../../assets/img/blanket.svg';
-import slates from '../../assets/img/slates.svg'
+import slates from '../../assets/img/slates.svg';
+import levelsList from '../levels/levels.json';
 
 class Blanket {
     public blanket: HTMLDivElement = document.createElement('div');
@@ -11,7 +13,10 @@ class Blanket {
     }
 
     drawLevelItems(levelNum:number) {
-
+        const img:HTMLDivElement = createElement('div', ['img'], this.blanket);
+        img.style.backgroundImage = `url(${slates})`;
+        const img2:HTMLDivElement = createElement('div', ['img'], this.blanket);
+        img2.style.backgroundImage = `url(${slates})`;
     }
 }
 
