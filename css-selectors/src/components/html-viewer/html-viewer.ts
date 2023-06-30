@@ -8,7 +8,7 @@ class Viewer {
   public viewer: HTMLDivElement = document.createElement('div');
   public preBlock: HTMLPreElement = document.createElement('pre');
 
-  draw(container: HTMLDivElement, activeLevel: number) {
+  draw(container: HTMLDivElement, activeLevel: number): void {
     this.viewer.classList.add('codeViewerBlock');
     container.append(this.viewer);
     this.preBlock.classList.add('codeTextContainer');
@@ -16,7 +16,7 @@ class Viewer {
     this.fillViewerField(activeLevel);
   }
 
-  fillViewerField(activeLevel: number) {
+  fillViewerField(activeLevel: number): void {
     let nesting: number = 0;
     let res = (
       container: HTMLPreElement | HTMLDivElement,
