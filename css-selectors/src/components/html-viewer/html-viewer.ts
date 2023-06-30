@@ -1,5 +1,5 @@
 import { createElement } from '../service-functions';
-import levelsList from '../levels/levels.json';
+import { LevelsList } from '../levels/config';
 import { Level } from '../../types/index';
 const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'));
@@ -68,7 +68,7 @@ class Viewer {
         }
       }
     };
-    res(this.preBlock, levelsList[activeLevel]);
+    res(this.preBlock, LevelsList[activeLevel]);
   }
 }
 

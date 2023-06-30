@@ -1,10 +1,7 @@
 import { createElement } from '../service-functions';
 import blanket from '../../assets/img/blanket.svg';
-import slates from '../../assets/img/slates.svg';
-import ring from '../../assets/img/ring.svg';
-import ringRopes from '../../assets/img/ring_ropes.svg';
-import levelsList from '../levels/levels.json';
 import { Level } from '../../types/index';
+import { LevelsList } from '../levels/config';
 
 class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
@@ -16,10 +13,6 @@ class Blanket {
   }
 
   drawLevelItems(levelNum: number) {
-    const img: HTMLDivElement = createElement('div', ['blanketPic'], this.blanket);
-    img.style.backgroundImage = `url(${slates})`;
-    // const img2: HTMLDivElement = createElement('div', ['img'], this.blanket);
-    // img2.style.backgroundImage = `url(${slates})`;
     let res = (container: HTMLDivElement, levelPack: Level[]) => {
       console.log(levelPack);
       for (let el of levelPack) {
@@ -31,7 +24,7 @@ class Blanket {
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
-        } else if (el.child && el.img === 'blanket') {
+        } else if (el.child && el.class === 'blanket') {
           console.log('el2:', el);
           return res(container, el.child);
         } else {
@@ -47,7 +40,7 @@ class Blanket {
         }
       }
     };
-    res(this.blanket, levelsList[levelNum]);
+    res(this.blanket, LevelsList[levelNum]);
   }
 }
 
