@@ -23,6 +23,7 @@ export enum levelNames {
 export interface Level {
           selector: string,
           img: string,
+          nesting: number,
           class?: string,
           id?: string,
           target?: boolean,

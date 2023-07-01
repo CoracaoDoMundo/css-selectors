@@ -15,10 +15,11 @@ const LevelsList: Level[][] = [
     {
       selector: 'div',
       img: blanket,
+      nesting: 0,
       class: 'blanket',
       child: [
-        { selector: 'slates', img: slates, target: true },
-        { selector: 'slates', img: slates, target: true },
+        { selector: 'slates', img: slates, nesting: 1, target: true },
+        { selector: 'slates', img: slates, nesting: 1, target: true },
       ],
     },
   ],
@@ -26,11 +27,18 @@ const LevelsList: Level[][] = [
     {
       selector: 'div',
       img: blanket,
+      nesting: 0,
       class: 'blanket',
       child: [
-        { selector: 'slates', img: slates },
-        { selector: 'ring', img: ring },
-        { selector: 'ring', img: ringRopes, id: 'ropes', target: true },
+        { selector: 'slates', img: slates, nesting: 1 },
+        { selector: 'ring', img: ring, nesting: 1 },
+        {
+          selector: 'ring',
+          img: ringRopes,
+          nesting: 1,
+          id: 'ropes',
+          target: true,
+        },
       ],
     },
   ],
@@ -38,15 +46,24 @@ const LevelsList: Level[][] = [
     {
       selector: 'div',
       img: blanket,
+      nesting: 0,
       class: 'blanket',
       child: [
-        { selector: 'slates', img: slates },
+        { selector: 'slates', img: slates, nesting: 1 },
         {
           selector: 'plate',
           img: plate,
-          child: [{ selector: 'strawberry', img: strawberry, target: true }],
+          nesting: 1,
+          child: [
+            {
+              selector: 'strawberry',
+              img: strawberry,
+              nesting: 2,
+              target: true,
+            },
+          ],
         },
-        { selector: 'strawberry', img: strawberry },
+        { selector: 'strawberry', img: strawberry, nesting: 1 },
       ],
     },
   ],
@@ -54,23 +71,27 @@ const LevelsList: Level[][] = [
     {
       selector: 'div',
       img: blanket,
+      nesting: 0,
       class: 'blanket',
       child: [
         {
           selector: 'ring',
           img: ring,
-          child: [{ selector: 'star', img: star }],
+          nesting: 1,
+          child: [{ selector: 'star', img: star, nesting: 2 }],
         },
         {
           selector: 'ring',
           img: ringRopes,
+          nesting: 1,
           id: 'ropes',
-          child: [{ selector: 'star', img: star, target: true }],
+          child: [{ selector: 'star', img: star, nesting: 2, target: true }],
         },
         {
           selector: 'plate',
           img: plate,
-          child: [{ selector: 'strawberry', img: strawberry }],
+          nesting: 1,
+          child: [{ selector: 'strawberry', img: strawberry, nesting: 2 }],
         },
       ],
     },
@@ -79,28 +100,32 @@ const LevelsList: Level[][] = [
     {
       selector: 'div',
       img: blanket,
+      nesting: 0,
       class: 'blanket',
       child: [
-        { selector: 'glasses', img: glasses },
+        { selector: 'glasses', img: glasses, nesting: 1 },
         {
           selector: 'glasses',
           img: glassesHearts,
+          nesting: 1,
           id: 'hearts',
           target: true,
         },
         {
           selector: 'book',
           img: book,
+          nesting: 1,
           child: [
             {
               selector: 'glasses',
               img: glassesHearts,
+              nesting: 2,
               id: 'hearts',
               target: true,
             },
           ],
         },
-        { selector: 'book', img: book },
+        { selector: 'book', img: book, nesting: 1 },
       ],
     },
   ],

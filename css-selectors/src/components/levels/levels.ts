@@ -3,7 +3,7 @@ import { levelNames } from '../../types/index';
 
 class Levels {
     public levelsBlock: HTMLDivElement = document.createElement('div');
-    public activeLevel: number = 3;
+    public activeLevel: number = 0;
     public levelItems: HTMLDivElement[] = [];
     public levelMarks: HTMLDivElement[] = [];
 

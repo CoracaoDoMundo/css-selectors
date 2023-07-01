@@ -17,7 +17,7 @@ class Viewer {
   }
 
   fillViewerField(activeLevel: number): void {
-    let nesting: number = 0;
+
     let res = (
       container: HTMLPreElement | HTMLDivElement,
       element: Level[]
@@ -39,7 +39,7 @@ class Viewer {
             container,
             `<${elemName} />`
           );
-          elem.style.paddingLeft = `${nesting}rem`;
+          elem.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elem);
         } else {
           const elemStart: HTMLDivElement = createElement(
@@ -59,12 +59,11 @@ class Viewer {
             container,
             `</${el.selector}>`
           );
-          elemStart.style.paddingLeft = `${nesting}rem`;
-          elemEnd.style.paddingLeft = `${nesting}rem`;
-          nesting += 1;
+          elemStart.style.paddingLeft = `${el.nesting}rem`;
+          elemEnd.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elemStart);
           hljs.highlightBlock(elemEnd);
-          return res(elemChild, el.child);
+          res(elemChild, el.child);
         }
       }
     };
