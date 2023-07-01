@@ -15,22 +15,30 @@ class Blanket {
   drawLevelItems(levelNum: number) {
     let res = (container: HTMLDivElement, levelPack: Level[]) => {
       for (let el of levelPack) {
+        let name = `${el.selector}Img`;
+        if (el.id) {
+          let nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
+          name = `${el.selector}${nameId}Img`;
+        }
         if (!el.child) {
           const pic: HTMLDivElement = createElement(
             'div',
-            ['blanketPic'],
+            [`${name}`, 'img'],
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
+          if (el.target) {
+            pic.classList.add('targetItem');
+          }
         } else if (el.child && el.class === 'blanket') {
-          return res(container, el.child);
+          res(container, el.child);
         } else {
           const pic: HTMLDivElement = createElement(
             'div',
-            ['blanketPic'],
+            [`${name}`, 'img'],
             container
           );
-          pic.style.backgroundImage = `url(${el.img})`; 
+          pic.style.backgroundImage = `url(${el.img})`;
           res(pic, el.child);
         }
       }
