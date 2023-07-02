@@ -1,5 +1,6 @@
 import { createElement } from '../service-functions';
 import { levelNames } from '../../types/index';
+import EventEmitter from '../event-emitter';
 
 class Levels {
   public levelsBlock: HTMLDivElement = document.createElement('div');
@@ -7,7 +8,7 @@ class Levels {
   public levelItems: HTMLDivElement[] = [];
   public levelMarks: HTMLDivElement[] = [];
 
-  drawLevelsBlock(levelsBlock: HTMLDivElement): void {
+  drawLevelsBlock(levelsBlock: HTMLDivElement, emitter:EventEmitter): void {
     const levelsHeader: HTMLHeadingElement = createElement(
       'h1',
       ['levelHeader'],
@@ -46,17 +47,16 @@ class Levels {
     }
     this.levelsBlock.classList.add('levelsList');
     levelsBlock.append(this.levelsBlock);
-    this.changeLevel();
+    this.changeLevel(emitter);
   }
 
-  changeLevel() {
+  changeLevel(emitter:EventEmitter) {
     this.levelItems.map((el, i) => {
       el.addEventListener('click', () => {
-        console.log('el:', i);
         this.levelItems.map((item) => item.classList.remove('activeListItem'));
         el.classList.add('activeListItem');
         this.activeLevel = i;
-        console.log('level:', this.activeLevel);
+        emitter.emit('levelNumberChanged', this.activeLevel);
       })
     })
   }

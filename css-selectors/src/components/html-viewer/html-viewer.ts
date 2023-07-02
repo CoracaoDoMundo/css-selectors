@@ -1,6 +1,7 @@
 import { createElement } from '../service-functions';
 import { LevelsList } from '../levels/config';
 import { Level } from '../../types/index';
+import EventEmitter from '../event-emitter';
 const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'));
 
@@ -9,15 +10,21 @@ class Viewer {
   public preBlock: HTMLPreElement = document.createElement('pre');
   public elements: HTMLDivElement[] = [];
 
-  draw(container: HTMLDivElement, activeLevel: number): void {
+  draw(
+    container: HTMLDivElement,
+    activeLevel: number,
+    emitter: EventEmitter
+  ): void {
     this.viewer.classList.add('codeViewerBlock');
     container.append(this.viewer);
     this.preBlock.classList.add('codeTextContainer');
     this.viewer.append(this.preBlock);
     this.fillViewerField(activeLevel);
+    emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
   }
 
   fillViewerField(activeLevel: number): void {
+    this.preBlock.innerHTML = '';
     let res = (
       container: HTMLPreElement | HTMLDivElement,
       element: Level[]
@@ -71,14 +78,13 @@ class Viewer {
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
-    console.log('elements:', this.elements);
   }
 
-      showTheTooltip() {
-      this.elements.forEach((item) => {
-          item.addEventListener('mouseup', () => {});
-      });
-    }
+  showTheTooltip() {
+    this.elements.forEach((item) => {
+      item.addEventListener('mouseup', () => {});
+    });
+  }
 }
 
 export default Viewer;

@@ -2,18 +2,21 @@ import { createElement } from '../service-functions';
 import blanket from '../../assets/img/blanket.svg';
 import { Level } from '../../types/index';
 import { LevelsList } from '../levels/config';
+import EventEmitter from '../event-emitter';
 
 class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
-  public items: HTMLDivElement[] = [];
+  public items: [HTMLDivElement, string][] = [];
 
-  draw(container: HTMLDivElement) {
+  draw(container: HTMLDivElement, emitter: EventEmitter) {
     this.blanket.classList.add('blanket');
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
+    emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
   }
 
   drawLevelItems(levelNum: number) {
+    this.blanket.innerHTML = '';
     let res = (container: HTMLDivElement, levelPack: Level[]) => {
       for (let el of levelPack) {
         let name = `${el.selector}Img`;
@@ -32,9 +35,9 @@ class Blanket {
             [`${name}`, 'img'],
             container
           );
-          this.items.push(pic);
           pic.style.backgroundImage = `url(${el.img})`;
-          pic.title = title;
+        //   pic.title = title;
+          this.items.push([pic, title]);
           if (el.target) {
             pic.classList.add('targetItem');
           }
@@ -46,31 +49,36 @@ class Blanket {
             [`${name}`, 'img'],
             container
           );
-          this.items.push(pic);
           pic.style.backgroundImage = `url(${el.img})`;
-          pic.title = title;
+        //   pic.title = title;
+          this.items.push([pic, title]);
           res(pic, el.child);
         }
       }
     };
+
     res(this.blanket, LevelsList[levelNum]);
     this.highlightElement();
   }
 
   highlightElement() {
     this.items.forEach((item) => {
-      item.addEventListener('mouseover', (e) => {
-        item.classList.add('shadow');
+      item[0].addEventListener('mouseover', (e) => {
+        item[0].classList.add('shadow');
         if (e.relatedTarget instanceof HTMLDivElement) {
           e.relatedTarget.classList.remove('shadow');
         }
       });
     });
     this.items.forEach((item) => {
-      item.addEventListener('mouseout', () => {
-        item.classList.remove('shadow');
+      item[0].addEventListener('mouseout', () => {
+        item[0].classList.remove('shadow');
       });
     });
+  }
+
+  addTooltipOnElement() {
+
   }
 }
 

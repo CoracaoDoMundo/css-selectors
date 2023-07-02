@@ -1,4 +1,4 @@
-import { Event } from '../../types/index';
+import { Event } from '../types/index';
 
 class EventEmitter {
   public events: Event = {};
