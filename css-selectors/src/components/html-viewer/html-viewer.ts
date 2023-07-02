@@ -20,11 +20,13 @@ class Viewer {
     this.preBlock.classList.add('codeTextContainer');
     this.viewer.append(this.preBlock);
     this.fillViewerField(activeLevel);
+    this.highlightElement();
     emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
   }
 
   fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = '';
+    let randomArr: string[] = [];
     let res = (
       container: HTMLPreElement | HTMLDivElement,
       element: Level[]
@@ -50,12 +52,19 @@ class Viewer {
           elem.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elem);
         } else {
+          let random = Math.floor(Math.random() * 100).toString();
+          if (randomArr.includes(random)) {
+            random = Math.floor(Math.random() * 100).toString();
+          } else {
+            randomArr.push(random);
+          }
           const elemStart: HTMLDivElement = createElement(
             'div',
             ['codeViewerText', `${el.selector}`],
             container,
             `<${elemName}>`
           );
+          elemStart.setAttribute('link', random);
           this.elements.push(elemStart);
           const elemChild: HTMLDivElement = createElement(
             'div',
@@ -68,6 +77,7 @@ class Viewer {
             container,
             `</${el.selector}>`
           );
+          elemEnd.setAttribute('link', random);
           this.elements.push(elemEnd);
           elemStart.style.paddingLeft = `${el.nesting}rem`;
           elemEnd.style.paddingLeft = `${el.nesting}rem`;
@@ -75,9 +85,65 @@ class Viewer {
           hljs.highlightBlock(elemEnd);
           res(elemChild, el.child);
         }
+        randomArr = [];
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
+  }
+
+  highlightElement() {
+    this.elements.forEach((item) => {
+      item.addEventListener('mouseover', (e: MouseEvent) => {
+        if (!item.classList.contains('div')) {
+          item.classList.add('highlight');
+          this.elements.forEach((elem) => {
+            if (
+              item.getAttribute('link') !== null &&
+              item.getAttribute('link') === elem.getAttribute('link')
+            ) {
+              elem.classList.add('highlight');
+            }
+            if (
+              item.nextSibling instanceof HTMLDivElement &&
+              item.nextSibling.classList.contains('childrenContainer')
+            ) {
+              item.nextSibling.classList.add('highlight');
+            }
+            if (
+              item.previousSibling instanceof HTMLDivElement &&
+              item.previousSibling.classList.contains('childrenContainer')
+            ) {
+              item.previousSibling.classList.add('highlight');
+            }
+          });
+        }
+      });
+    });
+    this.elements.forEach((item, i) => {
+      item.addEventListener('mouseout', (e: MouseEvent) => {
+        item.classList.remove('highlight');
+        this.elements.forEach((elem) => {
+          if (
+            item.getAttribute('link') !== null &&
+            item.getAttribute('link') === elem.getAttribute('link')
+          ) {
+            elem.classList.remove('highlight');
+          }
+          if (
+            item.nextSibling instanceof HTMLDivElement &&
+            item.nextSibling.classList.contains('childrenContainer')
+          ) {
+            item.nextSibling.classList.remove('highlight');
+          }
+          if (
+            item.previousSibling instanceof HTMLDivElement &&
+            item.previousSibling.classList.contains('childrenContainer')
+          ) {
+            item.previousSibling.classList.remove('highlight');
+          }
+        });
+      });
+    });
   }
 
   showTheTooltip() {

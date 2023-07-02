@@ -7,6 +7,7 @@ import EventEmitter from '../event-emitter';
 class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
   public items: [HTMLDivElement, string][] = [];
+  private activeTooltip: HTMLDivElement | null = null;
 
   draw(container: HTMLDivElement, emitter: EventEmitter) {
     this.blanket.classList.add('blanket');
@@ -36,7 +37,7 @@ class Blanket {
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
-        //   pic.title = title;
+          //   pic.title = title;
           this.items.push([pic, title]);
           if (el.target) {
             pic.classList.add('targetItem');
@@ -50,7 +51,7 @@ class Blanket {
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
-        //   pic.title = title;
+          //   pic.title = title;
           this.items.push([pic, title]);
           res(pic, el.child);
         }
@@ -59,6 +60,7 @@ class Blanket {
 
     res(this.blanket, LevelsList[levelNum]);
     this.highlightElement();
+    this.addTooltipOnElement();
   }
 
   highlightElement() {
@@ -78,7 +80,32 @@ class Blanket {
   }
 
   addTooltipOnElement() {
+    this.items.forEach((item) => {
+      let tooltip: HTMLDivElement;
+      let tooltipVisible: boolean = false;
 
+      const showTooltip = (e: MouseEvent) => {
+        if (!tooltipVisible) {
+          tooltipVisible = true;
+          tooltip = createElement('div', ['tooltip'], item[0], item[1]);
+          this.activeTooltip = tooltip;
+        }
+      };
+
+      const hideTooltip = (e: MouseEvent) => {
+        const relatedTarget = e.relatedTarget as Node;
+        if (!relatedTarget || !item[0].contains(relatedTarget)) {
+          if (tooltip) {
+            item[0].removeChild(tooltip);
+            this.activeTooltip = null;
+            tooltipVisible = false;
+          }
+        }
+      };
+
+      item[0].addEventListener('mouseover', showTooltip);
+      item[0].addEventListener('mouseout', hideTooltip);
+    });
   }
 }
 

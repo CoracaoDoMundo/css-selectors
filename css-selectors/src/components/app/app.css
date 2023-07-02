@@ -278,12 +278,18 @@
 .codeViewerText {
   color: #2d2010;
   background: transparent;
+  margin: 0.12rem 0;
+}
+
+.highlight {
+  background: #442d0ea2;
 }
 
 .codeTextContainer {
   display: flex;
   flex-direction: column;
   cursor: default;
+  margin: 0.2rem 0;
 }
 
 /* .codeViewerText:hover,
