@@ -21,6 +21,7 @@ class Viewer {
     this.viewer.append(this.preBlock);
     this.fillViewerField(activeLevel);
     emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
+    this.highlightElement(emitter);
   }
 
   fillViewerField(activeLevel: number): void {
@@ -32,21 +33,28 @@ class Viewer {
     ) => {
       for (let el of element) {
         let elemName = `${el.selector}`;
+        let tag = `${el.selector}`;
         if (el.class) {
           const className = ` class='${el.class}'`;
           elemName += className;
+          let nameClass =
+            el.class.slice(0, 1).toUpperCase() + el.class.slice(1);
+          tag += `${nameClass}`;
         }
         if (el.id) {
           const idName = ` id='${el.id}'`;
           elemName += idName;
+          let nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
+          tag += `${nameId}`;
         }
         if (!el.child) {
           const elem: HTMLDivElement = createElement(
             'div',
-            ['codeViewerText', `${el.selector}`],
+            ['codeViewerText'],
             container,
             `<${elemName} />`
           );
+          elem.setAttribute('tag', tag);
           this.elements.push(elem);
           elem.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elem);
@@ -59,10 +67,11 @@ class Viewer {
           }
           const elemStart: HTMLDivElement = createElement(
             'div',
-            ['codeViewerText', `${el.selector}`],
+            ['codeViewerText'],
             container,
             `<${elemName}>`
           );
+          elemStart.setAttribute('tag', tag);
           elemStart.setAttribute('link', random);
           this.elements.push(elemStart);
           const elemChild: HTMLDivElement = createElement(
@@ -72,10 +81,11 @@ class Viewer {
           );
           const elemEnd: HTMLDivElement = createElement(
             'div',
-            ['codeViewerText', `${el.selector}`],
+            ['codeViewerText'],
             container,
             `</${el.selector}>`
           );
+          elemEnd.setAttribute('tag', tag);
           elemEnd.setAttribute('link', random);
           this.elements.push(elemEnd);
           elemStart.style.paddingLeft = `${el.nesting}rem`;
@@ -91,9 +101,12 @@ class Viewer {
     this.highlightElement();
   }
 
-  highlightElement() {
+  highlightElement(emitter?: EventEmitter) {
     this.elements.forEach((item) => {
       item.addEventListener('mouseover', (e: MouseEvent) => {
+        if (emitter) {
+          emitter.emit('highlightElement', item);
+        }
         if (!item.classList.contains('div')) {
           item.classList.add('highlight');
           this.elements.forEach((elem) => {
@@ -121,6 +134,9 @@ class Viewer {
     });
     this.elements.forEach((item, i) => {
       item.addEventListener('mouseout', (e: MouseEvent) => {
+        if (emitter) {
+          emitter.emit('removeHighlightElement', item);
+        }
         item.classList.remove('highlight');
         this.elements.forEach((elem) => {
           if (

@@ -14,7 +14,7 @@ class EventEmitter {
       (func) => cb !== func
     );
   }
-  emit(eventName: string, args: number) {
+  emit(eventName: string, args: number | HTMLDivElement) {
     if (this.events[eventName] !== undefined) {
       this.events[eventName].forEach((func) => func.call(null, args));
     }

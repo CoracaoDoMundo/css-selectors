@@ -292,15 +292,6 @@
   margin: 0.2rem 0;
 }
 
-/* .codeViewerText:hover,
-.childrenContainer:hover {
-  background: #442d0ea2;
-  } */
-
-/* .codeViewerText:not(:first-child):not(:last-child):hover {
-font-weight: 700;
-} */
-
 .levelsList {
   display: flex;
   flex-direction: column;

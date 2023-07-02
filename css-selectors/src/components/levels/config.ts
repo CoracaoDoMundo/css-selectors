@@ -108,7 +108,7 @@ const LevelsList: Level[][] = [
           selector: 'glasses',
           img: glassesHearts,
           nesting: 1,
-          id: 'hearts',
+          class: 'hearts',
           target: true,
         },
         {
@@ -120,7 +120,7 @@ const LevelsList: Level[][] = [
               selector: 'glasses',
               img: glassesHearts,
               nesting: 2,
-              id: 'hearts',
+              class: 'hearts',
               target: true,
             },
           ],

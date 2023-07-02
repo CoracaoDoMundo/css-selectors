@@ -13,7 +13,6 @@ class AppLayout {
   public viewerBlock = new Viewer();
 
   draw(emitter: EventEmitter): void {
-    emitter.emit('levelNumberChanged', this.levels.activeLevel);
     this.drawGameBlock(emitter);
     const levelsBlock: HTMLDivElement = createElement(
       'div',

@@ -14,6 +14,14 @@ class Blanket {
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
     emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
+    emitter.subscribe(
+      'highlightElement',
+      this.highlightElementFromDom.bind(this)
+    );
+    emitter.subscribe(
+      'removeHighlightElement',
+      this.removeHighlightElementFromDom.bind(this)
+    );
   }
 
   drawLevelItems(levelNum: number) {
@@ -28,6 +36,9 @@ class Blanket {
           title = `<${el.selector} id="${el.id}"></${el.selector}>`;
         }
         if (el.class) {
+          let nameClass =
+            el.class.slice(0, 1).toUpperCase() + el.class.slice(1);
+          name = `${el.selector}${nameClass}Img`;
           title = `<${el.selector} class="${el.class}"></${el.selector}>`;
         }
         if (!el.child) {
@@ -37,7 +48,6 @@ class Blanket {
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
-          //   pic.title = title;
           this.items.push([pic, title]);
           if (el.target) {
             pic.classList.add('targetItem');
@@ -51,7 +61,6 @@ class Blanket {
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
-          //   pic.title = title;
           this.items.push([pic, title]);
           res(pic, el.child);
         }
@@ -76,6 +85,22 @@ class Blanket {
       item[0].addEventListener('mouseout', () => {
         item[0].classList.remove('shadow');
       });
+    });
+  }
+
+  highlightElementFromDom(elem: HTMLDivElement) {
+    this.items.forEach((item) => {
+      if (item[0].classList.contains(elem.getAttribute('tag') + 'Img')) {
+        item[0].classList.add('shadow');
+      }
+    });
+  }
+
+  removeHighlightElementFromDom(elem: HTMLDivElement) {
+    this.items.forEach((item) => {
+      if (item[0].classList.contains(elem.getAttribute('tag') + 'Img')) {
+        item[0].classList.remove('shadow');
+      }
     });
   }
 
