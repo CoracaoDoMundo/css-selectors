@@ -53,15 +53,25 @@ class Blanket {
         }
       }
     };
-
     res(this.blanket, LevelsList[levelNum]);
+    this.highlightElement();
   }
 
-  //   showTheTooltip() {
-  //     this.items.forEach((item) => {
-  //         item.addEventListener('mouseup', () => {});
-  //     });
-  //   }
+  highlightElement() {
+    this.items.forEach((item) => {
+      item.addEventListener('mouseover', (e) => {
+        item.classList.add('shadow');
+        if (e.relatedTarget instanceof HTMLDivElement) {
+          e.relatedTarget.classList.remove('shadow');
+        }
+      });
+    });
+    this.items.forEach((item) => {
+      item.addEventListener('mouseout', () => {
+        item.classList.remove('shadow');
+      });
+    });
+  }
 }
 
 export default Blanket;

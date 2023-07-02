@@ -7,6 +7,7 @@ hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'));
 class Viewer {
   public viewer: HTMLDivElement = document.createElement('div');
   public preBlock: HTMLPreElement = document.createElement('pre');
+  public elements: HTMLDivElement[] = [];
 
   draw(container: HTMLDivElement, activeLevel: number): void {
     this.viewer.classList.add('codeViewerBlock');
@@ -17,7 +18,6 @@ class Viewer {
   }
 
   fillViewerField(activeLevel: number): void {
-
     let res = (
       container: HTMLPreElement | HTMLDivElement,
       element: Level[]
@@ -39,6 +39,7 @@ class Viewer {
             container,
             `<${elemName} />`
           );
+          this.elements.push(elem);
           elem.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elem);
         } else {
@@ -48,6 +49,7 @@ class Viewer {
             container,
             `<${elemName}>`
           );
+          this.elements.push(elemStart);
           const elemChild: HTMLDivElement = createElement(
             'div',
             ['childrenContainer'],
@@ -59,6 +61,7 @@ class Viewer {
             container,
             `</${el.selector}>`
           );
+          this.elements.push(elemEnd);
           elemStart.style.paddingLeft = `${el.nesting}rem`;
           elemEnd.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elemStart);
@@ -68,7 +71,14 @@ class Viewer {
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
+    console.log('elements:', this.elements);
   }
+
+      showTheTooltip() {
+      this.elements.forEach((item) => {
+          item.addEventListener('mouseup', () => {});
+      });
+    }
 }
 
 export default Viewer;

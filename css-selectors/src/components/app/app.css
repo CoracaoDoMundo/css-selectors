@@ -110,8 +110,8 @@
 }
 
 .strawberryImg {
-  width: 120px;
-  height: 90px;
+  width: 110px;
+  height: 80px;
 }
 
 .starImg {
@@ -133,6 +133,14 @@
 
 .shadow {
   filter: drop-shadow(0px 0px 7px #f0b960);
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .targetItem {
