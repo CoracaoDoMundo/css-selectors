@@ -20,7 +20,6 @@ class Viewer {
     this.preBlock.classList.add('codeTextContainer');
     this.viewer.append(this.preBlock);
     this.fillViewerField(activeLevel);
-    this.highlightElement();
     emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
   }
 
@@ -89,6 +88,7 @@ class Viewer {
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
+    this.highlightElement();
   }
 
   highlightElement() {
