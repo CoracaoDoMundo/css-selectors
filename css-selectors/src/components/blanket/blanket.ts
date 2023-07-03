@@ -13,18 +13,9 @@ class Blanket {
     this.blanket.classList.add('blanket');
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
-    emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
-    emitter.subscribe(
-      'highlightElement',
-      this.highlightElementFromDom.bind(this)
-    );
-    emitter.subscribe(
-      'removeHighlightElement',
-      this.removeHighlightElementFromDom.bind(this)
-    );
   }
 
-  drawLevelItems(levelNum: number) {
+  drawLevelItems(levelNum: number, emitter?: EventEmitter) {
     this.blanket.innerHTML = '';
     let res = (container: HTMLDivElement, levelPack: Level[]) => {
       for (let el of levelPack) {
@@ -40,6 +31,12 @@ class Blanket {
             el.class.slice(0, 1).toUpperCase() + el.class.slice(1);
           name = `${el.selector}${nameClass}Img`;
           title = `<${el.selector} class="${el.class}"></${el.selector}>`;
+          if (el.attribute) {
+            let attrName =
+              el.attribute.slice(0, 1).toUpperCase() + el.attribute.slice(1);
+            name = `${el.selector}${nameClass}${attrName}Img`;
+            title = `<${el.selector} class="${el.class}" attr="${el.attribute}"></${el.selector}>`;
+          }
         }
         if (!el.child) {
           const pic: HTMLDivElement = createElement(
@@ -68,11 +65,31 @@ class Blanket {
     };
 
     res(this.blanket, LevelsList[levelNum]);
+    if (emitter) {
+      this.subscribes(emitter);
+    }
     this.highlightElement();
     this.addTooltipOnElement();
   }
 
+  subscribes(emitter: EventEmitter) {
+    emitter.subscribe('levelNumberChanged', () => {
+      this.items = [];
+    });
+    emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
+    emitter.subscribe(
+      'highlightElement',
+      this.highlightElementFromDom.bind(this)
+    );
+    emitter.subscribe(
+      'removeHighlightElement',
+      this.removeHighlightElementFromDom.bind(this)
+    );
+  }
+
   highlightElement() {
+    // console.log('this.items:', this.items);
+    console.log(1);
     this.items.forEach((item) => {
       item[0].addEventListener('mouseover', (e) => {
         item[0].classList.add('shadow');
@@ -89,7 +106,11 @@ class Blanket {
   }
 
   highlightElementFromDom(elem: HTMLDivElement) {
+    // console.log('this.items:', this.items);
+    console.log(2);
     this.items.forEach((item) => {
+      // console.log('item:', item);
+      // console.log('elem:', elem);
       if (item[0].classList.contains(elem.getAttribute('tag') + 'Img')) {
         item[0].classList.add('shadow');
       }

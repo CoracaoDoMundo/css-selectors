@@ -8,16 +8,16 @@ export interface Icon {
 }
 
 export enum levelNames {
-  'A' = 1,
-  '#id',
-  'A B',
-  '#id A',
-  '.className',
-  'A.className',
-  'Put your back into it!',
-  'A, B',
-  '*',
-  'A *',
+  'Tag name selector' = 1,
+  'Id selector (#id)',
+  'Class selector (.class)',
+  'Universal selector (*)',
+  'Selector by attribute',
+  'Selectors group by comma',
+  'Element with class',
+  'Nesting with space',
+  'First adjacent element (+)',
+  'Any adjacent element (~)',
 }
 
 export interface Level {
@@ -26,6 +26,7 @@ export interface Level {
   nesting: number;
   class?: string;
   id?: string;
+  attribute?: string;
   target?: boolean;
   child?: Level[];
 }

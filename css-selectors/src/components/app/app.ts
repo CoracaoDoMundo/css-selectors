@@ -13,7 +13,6 @@ class App {
 
   start() {
     this.layout.draw(this.emitter);
-    // console.log(this.emitter.events);
   }
 }
 

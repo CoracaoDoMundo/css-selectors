@@ -82,7 +82,7 @@ class AppLayout {
     gameBlock.append(this.levelHeader);
 
     this.blanket.draw(gameBlock, emitter);
-    this.blanket.drawLevelItems(this.levels.activeLevel);
+    this.blanket.drawLevelItems(this.levels.activeLevel, emitter);
 
     const codeField: HTMLDivElement = createElement(
       'div',
