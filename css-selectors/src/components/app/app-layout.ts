@@ -5,12 +5,14 @@ import EventEmitter from '../event-emitter';
 import Levels from '../levels/levels';
 import Blanket from '../blanket/blanket';
 import Viewer from '../html-viewer/html-viewer';
+import Input from '../input/input';
 
 class AppLayout {
   public levelHeader: HTMLHeadingElement = document.createElement('h1');
   public levels = new Levels();
   public blanket = new Blanket();
   public viewerBlock = new Viewer();
+  public input = new Input();
 
   draw(emitter: EventEmitter): void {
     this.drawGameBlock(emitter);
@@ -156,23 +158,9 @@ class AppLayout {
         (i + 1).toString(10)
       );
     }
-    const inputCode: HTMLInputElement = createElement(
-      'input',
-      ['input'],
-      codingFieldBlock
-    );
-    inputCode.setAttribute('placeholder', 'Type in a CSS selector');
-    const enterBtn: HTMLDivElement = createElement(
-      'div',
-      ['btn'],
-      codingFieldBlock
-    );
-    const enterText: HTMLDivElement = createElement(
-      'span',
-      ['btnText'],
-      enterBtn,
-      'Enter'
-    );
+    this.input.draw(codingFieldBlock, emitter, this.levels.activeLevel, codeField);
+    this.input.addListener(this.input.enterBtn, this.levels.activeLevel, codeField);
+
     const codeText: HTMLPreElement = createElement(
       'pre',
       ['codeText'],

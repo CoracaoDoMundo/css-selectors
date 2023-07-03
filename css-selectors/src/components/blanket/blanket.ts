@@ -88,8 +88,6 @@ class Blanket {
   }
 
   highlightElement() {
-    // console.log('this.items:', this.items);
-    console.log(1);
     this.items.forEach((item) => {
       item[0].addEventListener('mouseover', (e) => {
         item[0].classList.add('shadow');
@@ -106,11 +104,7 @@ class Blanket {
   }
 
   highlightElementFromDom(elem: HTMLDivElement) {
-    // console.log('this.items:', this.items);
-    console.log(2);
     this.items.forEach((item) => {
-      // console.log('item:', item);
-      // console.log('elem:', elem);
       if (item[0].classList.contains(elem.getAttribute('tag') + 'Img')) {
         item[0].classList.add('shadow');
       }

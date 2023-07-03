@@ -25,11 +25,9 @@ class Viewer {
       this.elements = [];
     });
     emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
-    console.log('emitter_start:', emitter);
   }
 
   fillViewerField(activeLevel: number, emitter: EventEmitter): void {
-    console.log('emitter_early:', emitter);
     this.preBlock.innerHTML = '';
     let randomArr: string[] = [];
     let res = (
@@ -40,20 +38,20 @@ class Viewer {
         let elemName = `${el.selector}`;
         let tag = `${el.selector}`;
         if (el.class) {
-          const className = ` class="${el.class}"`;
+          const className = `class="${el.class}"`;
           elemName += ` ${className}`;
           let nameClass =
             el.class.slice(0, 1).toUpperCase() + el.class.slice(1);
           tag += ` ${nameClass}`;
         }
         if (el.attribute) {
-          const attr = ` attr="${el.attribute}"`;
+          const attr = `attr="${el.attribute}"`;
           elemName += attr;
           let attrName = el.attribute.slice(0, 1).toUpperCase() + el.attribute.slice(1);
           tag += ` ${attrName}`;
         }
         if (el.id) {
-          const idName = ` id="${el.id}"`;
+          const idName = `id="${el.id}"`;
           elemName += idName;
           let nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
           tag += `${nameId}`;
@@ -110,18 +108,15 @@ class Viewer {
     };
     res(this.preBlock, LevelsList[activeLevel]);
     this.highlightElement(emitter);
-    console.log('emitter_process:', emitter);
   }
 
   highlightElement(emitter: EventEmitter) {
-    console.log(3);
     this.elements.forEach((item) => {
       item.addEventListener('mouseover', () => {
-        if (emitter) {
-          emitter.emit('highlightElement', item);
-          // console.log('emitter.events:', emitter.events);
-        }
-        if (item.getAttribute('tag') !== 'divBlanket') {
+        if (item.getAttribute('tag') !== 'div Blanket') {
+          if (emitter) {
+            emitter.emit('highlightElement', item);
+          }
           item.classList.add('highlight');
           this.elements.forEach((elem) => {
             if (
