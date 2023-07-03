@@ -16,7 +16,6 @@ import avocado from '../../assets/img/avocado.svg';
 import bookClosed from '../../assets/img/book_closed.svg';
 import shell from '../../assets/img/shell.svg';
 import flippers from '../../assets/img/flippers.svg';
-import leaf from '../../assets/img/leaf.svg';
 
 const LevelsList: Level[][] = [
   [
@@ -253,7 +252,7 @@ const LevelsList: Level[][] = [
         { selector: 'book', img: bookClosed, nesting: 1, class: 'closed' },
         { selector: 'glasses', img: glasses, nesting: 1, target: true },
         { selector: 'glasses', img: glasses, nesting: 1, target: true },
-        { selector: 'slates', img: slates, nesting: 1 },
+        { selector: 'star', img: star, nesting: 1 },
         { selector: 'glasses', img: glasses, nesting: 1 },
       ],
     },
