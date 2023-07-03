@@ -170,17 +170,15 @@ const LevelsList: Level[][] = [
         {
           selector: 'book',
           img: book,
-          nesting: 1,
-          target: true,
+          nesting: 1
         },
-        { selector: 'book', img: bookClosed, nesting: 1, class: 'closed' },
+        { selector: 'book', img: bookClosed, nesting: 1, class: 'closed', target: true },
         {
           selector: 'book',
           img: book,
-          nesting: 1,
-          target: true,
+          nesting: 1
         },
-        { selector: 'book', img: bookClosed, nesting: 1, class: 'closed' },
+        { selector: 'book', img: bookClosed, nesting: 1, class: 'closed', target: true },
       ],
     },
   ],
@@ -253,7 +251,7 @@ const LevelsList: Level[][] = [
         { selector: 'glasses', img: glasses, nesting: 1, target: true },
         { selector: 'glasses', img: glasses, nesting: 1, target: true },
         { selector: 'star', img: star, nesting: 1 },
-        { selector: 'glasses', img: glasses, nesting: 1 },
+        { selector: 'glasses', img: glasses, nesting: 1, target: true },
       ],
     },
   ],

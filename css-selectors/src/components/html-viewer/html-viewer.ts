@@ -40,20 +40,20 @@ class Viewer {
         let elemName = `${el.selector}`;
         let tag = `${el.selector}`;
         if (el.class) {
-          const className = ` class='${el.class}'`;
+          const className = ` class="${el.class}"`;
           elemName += ` ${className}`;
           let nameClass =
             el.class.slice(0, 1).toUpperCase() + el.class.slice(1);
           tag += ` ${nameClass}`;
         }
         if (el.attribute) {
-          const attr = ` attr='${el.attribute}'`;
+          const attr = ` attr="${el.attribute}"`;
           elemName += attr;
           let attrName = el.attribute.slice(0, 1).toUpperCase() + el.attribute.slice(1);
           tag += ` ${attrName}`;
         }
         if (el.id) {
-          const idName = ` id='${el.id}'`;
+          const idName = ` id="${el.id}"`;
           elemName += idName;
           let nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
           tag += `${nameId}`;

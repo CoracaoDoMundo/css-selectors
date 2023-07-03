@@ -4,7 +4,7 @@ import EventEmitter from '../event-emitter';
 
 class Levels {
   public levelsBlock: HTMLDivElement = document.createElement('div');
-  public activeLevel: number = 9;
+  public activeLevel: number = 0;
   public levelItems: HTMLDivElement[] = [];
   public levelMarks: HTMLDivElement[] = [];
 
