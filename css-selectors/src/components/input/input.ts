@@ -11,12 +11,14 @@ class Input {
   private emitter: EventEmitter;
   private res: boolean;
   private blanket: Blanket;
+  private solved: number;
 
   constructor(levels: Levels, blanket: Blanket) {
     this.levels = levels;
     this.emitter = EventEmitter.getInstance();
     this.res = false;
     this.blanket = blanket;
+    this.solved = 0;
   }
 
   draw(container: HTMLDivElement, field: HTMLDivElement): void {
@@ -41,6 +43,7 @@ class Input {
     this.emitter.subscribe('levelNumberChanged', () => {
       this.input.value = '';
     });
+    this.emitter.subscribe('resetGame', this.resetProgress.bind(this));
 
     this.enterBtn.addEventListener('click', () =>
       this.resultAnnouncement(field)
@@ -57,9 +60,10 @@ class Input {
     return this.res;
   }
 
-  resultAnnouncement(field: HTMLDivElement) {
+  resultAnnouncement(field: HTMLDivElement): void {
     this.checkOfAnswer();
     if (this.res === true) {
+      this.solved += 1;
       this.blanket.elementsDisappearance();
       this.input.value = '';
       if (
@@ -71,18 +75,27 @@ class Input {
       }
       setTimeout(() => {
         this.blanket.blanket.innerHTML = '';
-        if (this.levels.activeLevel < 9) {
+        if (this.solved === 10) {
+          alert('Congrats! You made it till the very end!');
+          this.levels.activeLevel = 0;
+        } else if (this.levels.activeLevel < 9) {
           this.levels.activeLevel += 1;
         } else if (this.levels.activeLevel === 9) {
-          alert('Congrats! You made it till the very end!');
           this.levels.activeLevel = 0;
         }
         this.emitter.emit('levelNumberChanged', this.levels.activeLevel);
       }, 300);
+      this.res = false;
     } else {
       field.classList.add('wrongAnswer');
       setTimeout(() => field.classList.remove('wrongAnswer'), 3000);
     }
+  }
+
+  resetProgress(): void {
+    this.solved = 0;
+    this.levels.activeLevel = 0;
+    this.emitter.emit('levelNumberChanged', this.levels.activeLevel);
   }
 }
 

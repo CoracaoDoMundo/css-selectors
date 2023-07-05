@@ -16,6 +16,7 @@ const RightAnswersList: string[][] = [
     '.fruit [attr="butBerry"]',
     'strawberry [attr="butBerry"]',
     'strawberry.fruit [attr="butBerry"]',
+    'strawberry'
   ],
   [
     'slates, hat, glasses',
@@ -35,6 +36,7 @@ const RightAnswersList: string[][] = [
     '.closed ~ glasses',
     'book.closed~glasses',
     'book.closed ~ glasses',
+    'glasses'
   ],
 ];
 

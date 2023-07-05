@@ -8,9 +8,13 @@ class Levels {
   public levelItems: HTMLDivElement[] = [];
   public levelMarks: HTMLDivElement[] = [];
   private emitter: EventEmitter;
+  public resetBtn: HTMLDivElement;
+  public helpBtn: HTMLDivElement;
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
+    this.resetBtn = document.createElement('div');
+    this.helpBtn = document.createElement('div');
     if (
       localStorage.getItem('coracaoLevel') === null ||
       localStorage.getItem('coracaoLevel') === undefined
@@ -60,6 +64,30 @@ class Levels {
     }
     this.levelsBlock.classList.add('levelsList');
     levelsBlock.append(this.levelsBlock);
+
+    this.resetBtn.classList.add('btn', 'btnLevelsBlock');
+    levelsBlock.append(this.resetBtn);
+    const enterText: HTMLDivElement = createElement(
+      'span',
+      ['btnText'],
+      this.resetBtn,
+      'Reset'
+    );
+
+    this.resetBtn.addEventListener('click', () => {
+      this.levelMarks.map((el) => el.innerHTML = '');
+      this.emitter.emit('resetGame');
+    });
+
+    this.helpBtn.classList.add('btn', 'btnLevelsBlock');
+    levelsBlock.append(this.helpBtn);
+    const helpText: HTMLDivElement = createElement(
+      'span',
+      ['btnText'],
+      this.helpBtn,
+      'Help'
+    );
+
     this.addListenerOnLevelsList();
     this.emitter.subscribe('levelNumberChanged', this.changeLevel.bind(this));
     this.emitter.subscribe(
