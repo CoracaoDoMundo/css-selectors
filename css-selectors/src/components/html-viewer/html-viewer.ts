@@ -51,7 +51,7 @@ class Viewer {
           tag += ` ${attrName}`;
         }
         if (el.id) {
-          const idName = `id="${el.id}"`;
+          const idName = ` id="${el.id}"`;
           elemName += idName;
           let nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
           tag += `${nameId}`;

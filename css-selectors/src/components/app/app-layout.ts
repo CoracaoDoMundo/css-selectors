@@ -12,19 +12,23 @@ class AppLayout {
   public levels = new Levels();
   public blanket = new Blanket();
   public viewerBlock = new Viewer();
-  public input = new Input();
+  private emitter: EventEmitter;
 
-  draw(emitter: EventEmitter): void {
-    this.drawGameBlock(emitter);
+  constructor() {
+    this.emitter = EventEmitter.getInstance();
+  }
+
+  draw(): void {
+    this.drawGameBlock();
     const levelsBlock: HTMLDivElement = createElement(
       'div',
       ['levelsBlock'],
       document.body
     );
-    this.levels.drawLevelsBlock(levelsBlock, emitter);
+    this.levels.drawLevelsBlock(levelsBlock);
   }
 
-  drawGameBlock(emitter:EventEmitter): void {
+  drawGameBlock(): void {
     const gameBlock: HTMLDivElement = createElement(
       'div',
       ['gameBlock'],
@@ -83,8 +87,8 @@ class AppLayout {
     this.levelHeader.textContent = 'Select the slates';
     gameBlock.append(this.levelHeader);
 
-    this.blanket.draw(gameBlock, emitter);
-    this.blanket.drawLevelItems(this.levels.activeLevel, emitter);
+    this.blanket.draw(gameBlock);
+    this.blanket.drawLevelItems(this.levels.activeLevel);
 
     const codeField: HTMLDivElement = createElement(
       'div',
@@ -158,8 +162,8 @@ class AppLayout {
         (i + 1).toString(10)
       );
     }
-    this.input.draw(codingFieldBlock, emitter, this.levels.activeLevel, codeField);
-    this.input.addListener(this.input.enterBtn, this.levels.activeLevel, codeField);
+    const input = new Input(this.levels);
+    input.draw(codingFieldBlock, codeField);
 
     const codeText: HTMLPreElement = createElement(
       'pre',
@@ -168,7 +172,7 @@ class AppLayout {
       `{\n /* Style would go here. */ \n}`
     );
 
-    this.viewerBlock.draw(codeField, this.levels.activeLevel, emitter);
+    this.viewerBlock.draw(codeField, this.levels.activeLevel, this.emitter);
 
     const footer: HTMLDivElement = createElement('div', ['footer'], gameBlock);
     const gitHubFooter: HTMLDivElement = createElement(

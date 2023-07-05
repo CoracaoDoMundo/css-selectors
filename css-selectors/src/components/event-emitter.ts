@@ -1,7 +1,18 @@
 import { Event } from '../types/index';
 
 class EventEmitter {
+
+  private static instance: EventEmitter;
   public events: Event = {};
+
+  private constructor() {}
+
+  public static getInstance(): EventEmitter {
+    if (!EventEmitter.instance) {
+      EventEmitter.instance = new EventEmitter();
+    }
+    return EventEmitter.instance;
+  }
 
   subscribe(eventName: string, cb: Function) {
     if (this.events[eventName] === undefined) {

@@ -4,11 +4,17 @@ import EventEmitter from '../event-emitter';
 
 class Levels {
   public levelsBlock: HTMLDivElement = document.createElement('div');
-  public activeLevel: number = 0;
+  public activeLevel: number;
   public levelItems: HTMLDivElement[] = [];
   public levelMarks: HTMLDivElement[] = [];
+  private emitter: EventEmitter;
 
-  drawLevelsBlock(levelsBlock: HTMLDivElement, emitter:EventEmitter): void {
+  constructor() {
+    this.emitter = EventEmitter.getInstance();
+    this.activeLevel = 0;
+  }
+
+  drawLevelsBlock(levelsBlock: HTMLDivElement): void {
     const levelsHeader: HTMLHeadingElement = createElement(
       'h1',
       ['levelHeader'],
@@ -47,18 +53,27 @@ class Levels {
     }
     this.levelsBlock.classList.add('levelsList');
     levelsBlock.append(this.levelsBlock);
-    this.changeLevel(emitter);
+    this.addListenerOnLevelsList();
+    this.emitter.subscribe('levelNumberChanged', this.changeLevel.bind(this));
   }
 
-  changeLevel(emitter:EventEmitter) {
+  addListenerOnLevelsList() {
     this.levelItems.map((el, i) => {
       el.addEventListener('click', () => {
         this.levelItems.map((item) => item.classList.remove('activeListItem'));
         el.classList.add('activeListItem');
         this.activeLevel = i;
-        emitter.emit('levelNumberChanged', this.activeLevel);
-      })
-    })
+        this.emitter.emit('levelNumberChanged', this.activeLevel);
+        // console.log('activeLevel:', this.activeLevel);
+      });
+    });
+  }
+
+  changeLevel(activeLevel: number) {
+    this.levelItems.map((item) => item.classList.remove('activeListItem'));
+    this.levelItems[activeLevel].classList.add('activeListItem');
+    // console.log('emitter-targ:', emitter.events);
+    // emitter.emit('levelNumberChanged', this.activeLevel);
   }
 }
 

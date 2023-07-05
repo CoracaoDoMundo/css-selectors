@@ -8,14 +8,19 @@ class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
   public items: [HTMLDivElement, string][] = [];
   private activeTooltip: HTMLDivElement | null = null;
+  private emitter: EventEmitter;
 
-  draw(container: HTMLDivElement, emitter: EventEmitter) {
+  constructor() {
+    this.emitter = EventEmitter.getInstance();
+  }
+
+  draw(container: HTMLDivElement) {
     this.blanket.classList.add('blanket');
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
   }
 
-  drawLevelItems(levelNum: number, emitter?: EventEmitter) {
+  drawLevelItems(levelNum: number) {
     this.blanket.innerHTML = '';
     let res = (container: HTMLDivElement, levelPack: Level[]) => {
       for (let el of levelPack) {
@@ -65,23 +70,22 @@ class Blanket {
     };
 
     res(this.blanket, LevelsList[levelNum]);
-    if (emitter) {
-      this.subscribes(emitter);
-    }
+
+    this.subscribes();
     this.highlightElement();
     this.addTooltipOnElement();
   }
 
-  subscribes(emitter: EventEmitter) {
-    emitter.subscribe('levelNumberChanged', () => {
+  subscribes() {
+    this.emitter.subscribe('levelNumberChanged', () => {
       this.items = [];
     });
-    emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
-    emitter.subscribe(
+    this.emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
+    this.emitter.subscribe(
       'highlightElement',
       this.highlightElementFromDom.bind(this)
     );
-    emitter.subscribe(
+    this.emitter.subscribe(
       'removeHighlightElement',
       this.removeHighlightElementFromDom.bind(this)
     );
