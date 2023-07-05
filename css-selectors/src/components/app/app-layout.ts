@@ -162,7 +162,7 @@ class AppLayout {
         (i + 1).toString(10)
       );
     }
-    const input = new Input(this.levels);
+    const input = new Input(this.levels, this.blanket);
     input.draw(codingFieldBlock, codeField);
 
     const codeText: HTMLPreElement = createElement(

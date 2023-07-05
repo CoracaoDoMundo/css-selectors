@@ -67,6 +67,7 @@ class Blanket {
           res(pic, el.child);
         }
       }
+    //   this.elementsDisappearance();
     };
 
     res(this.blanket, LevelsList[levelNum]);
@@ -80,7 +81,10 @@ class Blanket {
     this.emitter.subscribe('levelNumberChanged', () => {
       this.items = [];
     });
-    this.emitter.subscribe('levelNumberChanged', this.drawLevelItems.bind(this));
+    this.emitter.subscribe(
+      'levelNumberChanged',
+      this.drawLevelItems.bind(this)
+    );
     this.emitter.subscribe(
       'highlightElement',
       this.highlightElementFromDom.bind(this)
@@ -89,6 +93,12 @@ class Blanket {
       'removeHighlightElement',
       this.removeHighlightElementFromDom.bind(this)
     );
+  }
+
+  elementsDisappearance() {
+    this.items.map((el) => {
+        el[0].classList.add('fly');
+    })
   }
 
   highlightElement() {

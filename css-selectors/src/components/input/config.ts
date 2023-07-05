@@ -26,7 +26,7 @@ const RightAnswersList: string[][] = [
     'glasses, slates, hat',
   ],
   ['book.closed', '.closed'],
-  ['book glasses', 'book.closed glasses', '.closed glasses'],
+  ['book glasses', 'book.closed glasses', '.closed glasses', 'glasses'],
   ['shell+flippers', 'shell + flippers'],
   [
     'book~glasses',

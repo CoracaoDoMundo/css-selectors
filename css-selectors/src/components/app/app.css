@@ -232,6 +232,21 @@
   }
 }
 
+.fly {
+  animation: fly 0.3s ease;
+}
+
+@keyframes fly {
+  0% {
+    transform:translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+}
+
 .codeField {
   display: grid;
   grid-template-columns: 4% 46% 4% 46%;
@@ -263,7 +278,6 @@
 .hljs-tag {
   display: flex;
   flex-wrap: wrap;
-  /* gap: 5px; */
 }
 
 .hljs-attr {

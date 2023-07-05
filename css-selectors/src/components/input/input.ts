@@ -1,6 +1,7 @@
 import { createElement } from '../service-functions';
 import EventEmitter from '../event-emitter';
 import Levels from '../levels/levels';
+import Blanket from '../../components/blanket/blanket';
 import { RightAnswersList } from '../input/config';
 
 class Input {
@@ -9,11 +10,13 @@ class Input {
   public levels: Levels;
   private emitter: EventEmitter;
   private res: boolean;
+  private blanket: Blanket;
 
-  constructor(levels: Levels) {
+  constructor(levels: Levels, blanket: Blanket) {
     this.levels = levels;
     this.emitter = EventEmitter.getInstance();
     this.res = false;
+    this.blanket = blanket;
   }
 
   draw(container: HTMLDivElement, field: HTMLDivElement): void {
@@ -54,13 +57,18 @@ class Input {
   resultAnnouncement(field: HTMLDivElement) {
     this.checkOfAnswer();
     if (this.res === true) {
-      if (this.levels.activeLevel < 9) {
-        this.input.value = '';
-        this.levels.activeLevel += 1;
+      this.blanket.elementsDisappearance();
+      this.input.value = '';
+      setTimeout(() => {
+        this.blanket.blanket.innerHTML = '';
+        if (this.levels.activeLevel < 9) {
+          this.levels.activeLevel += 1;
+        } else if (this.levels.activeLevel === 9) {
+          alert('Congrats! You made it till the very end!');
+          this.levels.activeLevel = 0;
+        }
         this.emitter.emit('levelNumberChanged', this.levels.activeLevel);
-      } else if (this.levels.activeLevel === 9) {
-        alert('Полная победа!');
-      }
+      }, 300);
     } else {
       field.classList.add('wrongAnswer');
       setTimeout(() => field.classList.remove('wrongAnswer'), 3000);
