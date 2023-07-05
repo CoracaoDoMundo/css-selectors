@@ -8,16 +8,15 @@ class Input {
   public enterBtn: HTMLDivElement = document.createElement('div');
   public levels: Levels;
   private emitter: EventEmitter;
+  private res: boolean;
 
   constructor(levels: Levels) {
     this.levels = levels;
     this.emitter = EventEmitter.getInstance();
+    this.res = false;
   }
 
-  draw(
-    container: HTMLDivElement,
-    field: HTMLDivElement
-  ): void {
+  draw(container: HTMLDivElement, field: HTMLDivElement): void {
     this.input.classList.add('input');
     this.input.setAttribute('placeholder', 'Type in a CSS selector');
     container.append(this.input);
@@ -30,12 +29,16 @@ class Input {
       'Enter'
     );
     this.input.addEventListener('keydown', (e) => {
-        if (e.code === 'Enter') {
-          this.resultAnnouncement(this.enterBtn, field);
-        }
-      });
+      if (e.code === 'Enter') {
+        this.resultAnnouncement(field);
+      }
+    });
 
     this.emitter.subscribe('levelNumberChanged', this.checkOfAnswer.bind(this));
+
+    this.enterBtn.addEventListener('click', () =>
+      this.resultAnnouncement(field)
+    );
   }
 
   checkOfAnswer(): boolean {
@@ -43,19 +46,15 @@ class Input {
       (el) => el === this.input.value
     );
     if (res.length === 1) {
-      return true;
+      this.res = true;
     }
-    return false;
+    return this.res;
   }
 
-  resultAnnouncement(
-    enterBtn: HTMLDivElement,
-    field: HTMLDivElement
-  ) {
-    const res = this.checkOfAnswer();
-    if (res === true) {
+  resultAnnouncement(field: HTMLDivElement) {
+    this.checkOfAnswer();
+    if (this.res === true) {
       if (this.levels.activeLevel < 9) {
-        alert('Победа!');
         this.input.value = '';
         this.levels.activeLevel += 1;
         this.emitter.emit('levelNumberChanged', this.levels.activeLevel);
