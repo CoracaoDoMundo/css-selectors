@@ -9,25 +9,29 @@ class Viewer {
   public viewer: HTMLDivElement = document.createElement('div');
   public preBlock: HTMLPreElement = document.createElement('pre');
   public elements: HTMLDivElement[] = [];
+  private emitter: EventEmitter;
+
+  constructor() {
+    this.emitter = EventEmitter.getInstance();
+  }
 
   draw(
     container: HTMLDivElement,
     activeLevel: number,
-    emitter: EventEmitter
   ): void {
     this.viewer.classList.add('codeViewerBlock');
     container.append(this.viewer);
     this.preBlock.classList.add('codeTextContainer');
     this.viewer.append(this.preBlock);
-    this.highlightElement(emitter);
-    this.fillViewerField(activeLevel, emitter);
-    emitter.subscribe('levelNumberChanged', () => {
+    this.highlightElement();
+    this.fillViewerField(activeLevel);
+    this.emitter.subscribe('levelNumberChanged', () => {
       this.elements = [];
     });
-    emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
+    this.emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
   }
 
-  fillViewerField(activeLevel: number, emitter: EventEmitter): void {
+  fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = '';
     let randomArr: string[] = [];
     let res = (
@@ -107,16 +111,15 @@ class Viewer {
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
-    this.highlightElement(emitter);
+    this.highlightElement();
   }
 
-  highlightElement(emitter: EventEmitter) {
+  highlightElement() {
     this.elements.forEach((item) => {
+      // console.log('this.elements, html:', item);
       item.addEventListener('mouseover', () => {
         if (item.getAttribute('tag') !== 'div Blanket') {
-          if (emitter) {
-            emitter.emit('highlightElement', item);
-          }
+            this.emitter.emit('highlightElement', item);
           item.classList.add('highlight');
           this.elements.forEach((elem) => {
             if (
@@ -143,9 +146,7 @@ class Viewer {
     });
     this.elements.forEach((item) => {
       item.addEventListener('mouseout', () => {
-        if (emitter) {
-          emitter.emit('removeHighlightElement', item);
-        }
+          this.emitter.emit('removeHighlightElement', item);
         item.classList.remove('highlight');
         this.elements.forEach((elem) => {
           if (

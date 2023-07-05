@@ -7,7 +7,7 @@ import EventEmitter from '../event-emitter';
 class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
   public items: [HTMLDivElement, string][] = [];
-  private activeTooltip: HTMLDivElement | null = null;
+  //   private activeTooltip: HTMLDivElement | null = null;
   private emitter: EventEmitter;
 
   constructor() {
@@ -67,7 +67,6 @@ class Blanket {
           res(pic, el.child);
         }
       }
-    //   this.elementsDisappearance();
     };
 
     res(this.blanket, LevelsList[levelNum]);
@@ -97,8 +96,8 @@ class Blanket {
 
   elementsDisappearance() {
     this.items.map((el) => {
-        el[0].classList.add('fly');
-    })
+      el[0].classList.add('fly');
+    });
   }
 
   highlightElement() {
@@ -118,16 +117,18 @@ class Blanket {
   }
 
   highlightElementFromDom(elem: HTMLDivElement) {
+    const value: string = (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
     this.items.forEach((item) => {
-      if (item[0].classList.contains(elem.getAttribute('tag') + 'Img')) {
+      if (item[0].classList.contains(value)) {
         item[0].classList.add('shadow');
       }
     });
   }
 
   removeHighlightElementFromDom(elem: HTMLDivElement) {
+    const value: string = (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
     this.items.forEach((item) => {
-      if (item[0].classList.contains(elem.getAttribute('tag') + 'Img')) {
+      if (item[0].classList.contains(value)) {
         item[0].classList.remove('shadow');
       }
     });
@@ -142,7 +143,7 @@ class Blanket {
         if (!tooltipVisible) {
           tooltipVisible = true;
           tooltip = createElement('div', ['tooltip'], item[0], item[1]);
-          this.activeTooltip = tooltip;
+          //   this.activeTooltip = tooltip;
         }
       };
 
@@ -151,7 +152,7 @@ class Blanket {
         if (!relatedTarget || !item[0].contains(relatedTarget)) {
           if (tooltip) {
             item[0].removeChild(tooltip);
-            this.activeTooltip = null;
+            // this.activeTooltip = null;
             tooltipVisible = false;
           }
         }

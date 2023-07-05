@@ -172,7 +172,7 @@ class AppLayout {
       `{\n /* Style would go here. */ \n}`
     );
 
-    this.viewerBlock.draw(codeField, this.levels.activeLevel, this.emitter);
+    this.viewerBlock.draw(codeField, this.levels.activeLevel);
 
     const footer: HTMLDivElement = createElement('div', ['footer'], gameBlock);
     const gitHubFooter: HTMLDivElement = createElement(
