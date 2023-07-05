@@ -88,6 +88,10 @@ class Levels {
       'Help'
     );
 
+    this.helpBtn.addEventListener('click', () => {
+      this.emitter.emit('giveHint');
+    });
+
     this.addListenerOnLevelsList();
     this.emitter.subscribe('levelNumberChanged', this.changeLevel.bind(this));
     this.emitter.subscribe(
@@ -116,13 +120,13 @@ class Levels {
     localStorage.setItem('coracaoLevel', this.activeLevel.toString(10));
   }
 
-  createCheckMark(): SVGSVGElement {
+  createCheckMark(color: string): SVGSVGElement {
     const mark: SVGSVGElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'svg'
     );
     mark.setAttribute('viewBox', '0 0 1920 1920');
-    mark.setAttribute('fill', '#96d35f');
+    mark.setAttribute('fill', color);
     mark.classList.add('mark');
     const container: SVGGraphicsElement = document.createElementNS(
       'http://www.w3.org/2000/svg',

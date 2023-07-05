@@ -12,6 +12,7 @@ class Input {
   private res: boolean;
   private blanket: Blanket;
   private solved: number;
+  private hint: boolean;
 
   constructor(levels: Levels, blanket: Blanket) {
     this.levels = levels;
@@ -19,6 +20,7 @@ class Input {
     this.res = false;
     this.blanket = blanket;
     this.solved = 0;
+    this.hint = false;
   }
 
   draw(container: HTMLDivElement, field: HTMLDivElement): void {
@@ -44,6 +46,7 @@ class Input {
       this.input.value = '';
     });
     this.emitter.subscribe('resetGame', this.resetProgress.bind(this));
+    this.emitter.subscribe('giveHint', this.outputHint.bind(this));
 
     this.enterBtn.addEventListener('click', () =>
       this.resultAnnouncement(field)
@@ -67,11 +70,14 @@ class Input {
       this.blanket.elementsDisappearance();
       this.input.value = '';
       if (
-        this.levels.levelMarks[this.levels.activeLevel].childNodes.length === 0
+        this.levels.levelMarks[this.levels.activeLevel].childNodes.length === 0 && this.hint === false
       ) {
         this.levels.levelMarks[this.levels.activeLevel].append(
-          this.levels.createCheckMark()
+          this.levels.createCheckMark('#96d35f')
         );
+      } else if (this.levels.levelMarks[this.levels.activeLevel].childNodes.length === 0 && this.hint === true) {
+        this.levels.levelMarks[this.levels.activeLevel].append(this.levels.createCheckMark('#ff0000'));
+        this.hint = false;
       }
       setTimeout(() => {
         this.blanket.blanket.innerHTML = '';
@@ -96,6 +102,23 @@ class Input {
     this.solved = 0;
     this.levels.activeLevel = 0;
     this.emitter.emit('levelNumberChanged', this.levels.activeLevel);
+  }
+
+  outputHint() {
+    this.hint = true;
+    const answer: string[] =
+      RightAnswersList[this.levels.activeLevel][0].split('');
+    let i: number = 0;
+    const show = () => {
+      this.input.value += answer[i];
+      if (i < answer.length - 1) {
+        i += 1;
+        setTimeout(() => show(), 300);
+      } else {
+        this.input.setAttribute('value', this.input.value);
+      }
+    };
+    setTimeout(() => show(), 300);
   }
 }
 
