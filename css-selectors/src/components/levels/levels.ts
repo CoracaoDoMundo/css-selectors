@@ -87,6 +87,41 @@ class Levels {
   setLocalStorage() {
     localStorage.setItem('coracaoLevel', this.activeLevel.toString(10));
   }
+
+  createCheckMark(): SVGSVGElement {
+    const mark: SVGSVGElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg'
+    );
+    mark.setAttribute('viewBox', '0 0 1920 1920');
+    mark.setAttribute('fill', '#96d35f');
+    mark.classList.add('mark');
+    const container: SVGGraphicsElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'g'
+    );
+    container.setAttribute('id', 'SVGRepo_bgCarrier');
+    container.setAttribute('stroke-width', '0');
+    const secondContainer: SVGGraphicsElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'g'
+    );
+    secondContainer.setAttribute('id', 'SVGRepo_bgCarrier');
+    const path: SVGPathElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    );
+    path.setAttribute(
+      'd',
+      'M1743.858 267.012 710.747 1300.124 176.005 765.382 0 941.387l710.747 710.871 1209.24-1209.116z'
+    );
+    path.setAttribute('fill-rule', 'evenodd');
+    secondContainer.append(path);
+    mark.append(container);
+    mark.append(secondContainer);
+
+    return mark;
+  }
 }
 
 export default Levels;

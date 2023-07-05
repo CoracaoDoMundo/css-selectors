@@ -38,6 +38,9 @@ class Input {
     });
 
     this.emitter.subscribe('levelNumberChanged', this.checkOfAnswer.bind(this));
+    this.emitter.subscribe('levelNumberChanged', () => {
+      this.input.value = '';
+    });
 
     this.enterBtn.addEventListener('click', () =>
       this.resultAnnouncement(field)
@@ -59,6 +62,13 @@ class Input {
     if (this.res === true) {
       this.blanket.elementsDisappearance();
       this.input.value = '';
+      if (
+        this.levels.levelMarks[this.levels.activeLevel].childNodes.length === 0
+      ) {
+        this.levels.levelMarks[this.levels.activeLevel].append(
+          this.levels.createCheckMark()
+        );
+      }
       setTimeout(() => {
         this.blanket.blanket.innerHTML = '';
         if (this.levels.activeLevel < 9) {
