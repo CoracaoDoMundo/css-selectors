@@ -11,7 +11,14 @@ class Levels {
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
-    this.activeLevel = 0;
+    if (
+      localStorage.getItem('coracaoLevel') === null ||
+      localStorage.getItem('coracaoLevel') === undefined
+    ) {
+      this.activeLevel = 0;
+    } else {
+      this.activeLevel = Number(localStorage.getItem('coracaoLevel'));
+    }
   }
 
   drawLevelsBlock(levelsBlock: HTMLDivElement): void {
@@ -55,6 +62,10 @@ class Levels {
     levelsBlock.append(this.levelsBlock);
     this.addListenerOnLevelsList();
     this.emitter.subscribe('levelNumberChanged', this.changeLevel.bind(this));
+    this.emitter.subscribe(
+      'levelNumberChanged',
+      this.setLocalStorage.bind(this)
+    );
   }
 
   addListenerOnLevelsList() {
@@ -64,7 +75,6 @@ class Levels {
         el.classList.add('activeListItem');
         this.activeLevel = i;
         this.emitter.emit('levelNumberChanged', this.activeLevel);
-        // console.log('activeLevel:', this.activeLevel);
       });
     });
   }
@@ -72,8 +82,10 @@ class Levels {
   changeLevel(activeLevel: number) {
     this.levelItems.map((item) => item.classList.remove('activeListItem'));
     this.levelItems[activeLevel].classList.add('activeListItem');
-    // console.log('emitter-targ:', emitter.events);
-    // emitter.emit('levelNumberChanged', this.activeLevel);
+  }
+
+  setLocalStorage() {
+    localStorage.setItem('coracaoLevel', this.activeLevel.toString(10));
   }
 }
 
