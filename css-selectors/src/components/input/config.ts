@@ -1,7 +1,7 @@
 const RightAnswersList: string[][] = [
   ['slates', 'div slates', '.blanket slates', 'div.blanket slates', '*'],
-  ['#ropes', 'ring #ropes', '[id=ropes]'],
-  ['.hearts', 'glasses.hearts'],
+  ['#ropes', 'ring #ropes', '[id=ropes]', 'ring:last-child'],
+  ['.hearts', 'glasses.hearts', 'glasses .hearts'],
   [
     '*',
     'slates, mask, hat',
@@ -16,7 +16,8 @@ const RightAnswersList: string[][] = [
     '.fruit [attr="butBerry"]',
     'strawberry [attr="butBerry"]',
     'strawberry.fruit [attr="butBerry"]',
-    'strawberry'
+    'strawberry',
+    'plate strawberry',
   ],
   [
     'slates, hat, glasses',
@@ -36,7 +37,7 @@ const RightAnswersList: string[][] = [
     '.closed ~ glasses',
     'book.closed~glasses',
     'book.closed ~ glasses',
-    'glasses'
+    'glasses',
   ],
 ];
 
