@@ -6,6 +6,8 @@ import Levels from '../levels/levels';
 import Blanket from '../blanket/blanket';
 import Viewer from '../html-viewer/html-viewer';
 import Input from '../input/input';
+const hljs = require('highlight.js/lib/core');
+hljs.registerLanguage('css', require('highlight.js/lib/languages/css'));
 
 class AppLayout {
   public levelHeader: HTMLHeadingElement = document.createElement('h1');
@@ -17,22 +19,11 @@ class AppLayout {
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
-    // this.levelsBlock.classList.add('levelsBlock'); = createElement(
-    //   'div',
-    //   ['levelsBlock'],
-    //   document.body
-    // );
   }
 
   draw(): void {
     this.drawGameBlock();
     this.levelsBlock.classList.add('levelsBlock');
-
-    // const levelsBlock: HTMLDivElement = createElement(
-    //   'div',
-    //   ['levelsBlock'],
-    //   document.body
-    // );
     this.levels.drawLevelsBlock(this.levelsBlock);
     document.body.append(this.levelsBlock);
   }
@@ -189,6 +180,8 @@ class AppLayout {
       `{\n /* Style would go here. */ \n}`
     );
 
+    hljs.highlightBlock(codeText);
+
     this.viewerBlock.draw(codeField, this.levels.activeLevel);
 
     const footer: HTMLDivElement = createElement('div', ['footer'], gameBlock);
@@ -311,16 +304,11 @@ class AppLayout {
 
   openMenuByBurgerIcon(icon: HTMLDivElement, menu: HTMLDivElement, shadow: HTMLDivElement) {
     icon.addEventListener("click", () => {
-      console.log(1);
-      console.log('menu:', menu);
-      console.log('shadow:', shadow);
       menu.classList.add("menuActive");
       shadow.classList.add("shadowActive");
       document.body.classList.add("noScroll");
     });
-    
     menu.addEventListener("click", (e) => {
-      console.log(2);
       if (e.target instanceof HTMLDivElement) {
         if (!e.target.classList.contains('levelItemBlock')) {
           menu.classList.remove("menuActive");
@@ -329,20 +317,11 @@ class AppLayout {
         }
       }
     });
-    
     shadow.addEventListener("click", () => {
-      console.log(3);
       menu.classList.remove("menuActive");
       shadow.classList.remove("shadowActive");
       document.body.classList.remove("noScroll");
     });
-    
-    // icon.addEventListener("click", () => {
-    //   console.log(4);
-    //   menu.classList.remove("menuActive");
-    //   shadow.classList.remove("shadowActive");
-    //   document.body.classList.remove("noScroll");
-    // });
   }
 }
 
