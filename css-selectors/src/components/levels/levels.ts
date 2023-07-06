@@ -28,10 +28,14 @@ class Levels {
   drawLevelsBlock(levelsBlock: HTMLDivElement): void {
     const levelsHeader: HTMLHeadingElement = createElement(
       'h1',
-      ['levelHeader'],
+      ['levelHeader', 'levelBlockHeader'],
       levelsBlock,
       'Levels:'
     );
+
+    const burgerCloseIcon: HTMLDivElement = createElement('div', ['burgerIconClose'], levelsBlock);
+    const burgerCloseIconLineFirst: HTMLDivElement = createElement('div', ['burgerIconCloseLine', 'firstLine'], burgerCloseIcon);
+    const burgerCloseIconLineSecond: HTMLDivElement = createElement('div', ['burgerIconCloseLine', 'secondLine'], burgerCloseIcon);
 
     if (
       Number(localStorage.getItem('coracaoLevel')) > 0 &&

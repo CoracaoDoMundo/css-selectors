@@ -9,6 +9,7 @@ import Input from '../input/input';
 
 class AppLayout {
   public levelHeader: HTMLHeadingElement = document.createElement('h1');
+  public levelsBlock: HTMLDivElement = document.createElement('div');
   public levels = new Levels();
   public blanket = new Blanket();
   public viewerBlock = new Viewer();
@@ -16,16 +17,24 @@ class AppLayout {
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
+    // this.levelsBlock.classList.add('levelsBlock'); = createElement(
+    //   'div',
+    //   ['levelsBlock'],
+    //   document.body
+    // );
   }
 
   draw(): void {
     this.drawGameBlock();
-    const levelsBlock: HTMLDivElement = createElement(
-      'div',
-      ['levelsBlock'],
-      document.body
-    );
-    this.levels.drawLevelsBlock(levelsBlock);
+    this.levelsBlock.classList.add('levelsBlock');
+
+    // const levelsBlock: HTMLDivElement = createElement(
+    //   'div',
+    //   ['levelsBlock'],
+    //   document.body
+    // );
+    this.levels.drawLevelsBlock(this.levelsBlock);
+    document.body.append(this.levelsBlock);
   }
 
   drawGameBlock(): void {
@@ -34,6 +43,7 @@ class AppLayout {
       ['gameBlock'],
       document.body
     );
+    const shadow: HTMLDivElement = createElement('div', ['burgerShadow'], gameBlock);
     const headerLine: HTMLDivElement = createElement(
       'div',
       ['headerLine'],
@@ -82,6 +92,13 @@ class AppLayout {
     };
     const twitterIcon: SVGSVGElement = this.renderIcon(twitterData);
     socialBlock.append(twitterIcon);
+
+    const burgerIcon: HTMLDivElement = createElement('div', ['burgerIcon'], socialBlock);
+    let i: number = 0;
+    while (i < 3) {
+      const burgerIconLine: HTMLSpanElement = createElement('span', ['burgerIconLine'], burgerIcon);
+      i += 1;
+    }
 
     this.levelHeader.classList.add('levelHeader');
     this.levelHeader.textContent = 'Select the slates';
@@ -218,6 +235,7 @@ class AppLayout {
     rsLogoLink.setAttribute('href', 'https://rs.school');
     const rsLogo: SVGSVGElement = this.renderIcon(rsData);
     rsLogoLink.append(rsLogo);
+    this.openMenuByBurgerIcon(burgerIcon, this.levelsBlock, shadow);
   }
 
   renderIcon(data: Icon): SVGSVGElement {
@@ -289,6 +307,42 @@ class AppLayout {
     }
 
     return icon;
+  }
+
+  openMenuByBurgerIcon(icon: HTMLDivElement, menu: HTMLDivElement, shadow: HTMLDivElement) {
+    icon.addEventListener("click", () => {
+      console.log(1);
+      console.log('menu:', menu);
+      console.log('shadow:', shadow);
+      menu.classList.add("menuActive");
+      shadow.classList.add("shadowActive");
+      document.body.classList.add("noScroll");
+    });
+    
+    menu.addEventListener("click", (e) => {
+      console.log(2);
+      if (e.target instanceof HTMLDivElement) {
+        if (!e.target.classList.contains('levelItemBlock')) {
+          menu.classList.remove("menuActive");
+          shadow.classList.remove("shadowActive");
+          document.body.classList.remove("noScroll");
+        }
+      }
+    });
+    
+    shadow.addEventListener("click", () => {
+      console.log(3);
+      menu.classList.remove("menuActive");
+      shadow.classList.remove("shadowActive");
+      document.body.classList.remove("noScroll");
+    });
+    
+    // icon.addEventListener("click", () => {
+    //   console.log(4);
+    //   menu.classList.remove("menuActive");
+    //   shadow.classList.remove("shadowActive");
+    //   document.body.classList.remove("noScroll");
+    // });
   }
 }
 
