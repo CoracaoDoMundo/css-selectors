@@ -8,6 +8,7 @@ class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
   public items: [HTMLDivElement, string][] = [];
   private emitter: EventEmitter;
+  private tooltipVisible: boolean = false;
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
@@ -69,6 +70,7 @@ class Blanket {
     };
 
     res(this.blanket, LevelsList[levelNum]);
+    this.personalizeItems();
 
     this.subscribes();
     this.highlightElement();
@@ -85,11 +87,11 @@ class Blanket {
     );
     this.emitter.subscribe(
       'highlightElement',
-      this.highlightElementFromDom.bind(this)
+      this.highlightLinkedElement.bind(this)
     );
     this.emitter.subscribe(
       'removeHighlightElement',
-      this.removeHighlightElementFromDom.bind(this)
+      this.removeHighlightFromLinkedElement.bind(this)
     );
   }
 
@@ -115,30 +117,8 @@ class Blanket {
     });
   }
 
-    highlightElementFromDom(elem: HTMLDivElement) {
-      const value: string = (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
-      this.items.forEach((item) => {
-        if (item[0].classList.contains(value)) {
-          item[0].classList.add('shadow');
-        }
-      });
-      // this.items[num][0].classList.add('shadow');
-    }
-
-//   highlightElementFromDom(num: number) {
-//     if (num >= 0 && num < 10) {
-//       this.items[num][0].classList.add('shadow');
-//     }
-//   }
-
-  removeHighlightElementFromDom(elem: HTMLDivElement) {
-    const value: string =
-      (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
-    this.items.forEach((item) => {
-      if (item[0].classList.contains(value)) {
-        item[0].classList.remove('shadow');
-      }
-    });
+  personalizeItems() {
+    this.items.map((el, i) => el[0].setAttribute('item', `${i}`));
   }
 
   addTooltipOnElement() {
@@ -165,6 +145,39 @@ class Blanket {
 
       item[0].addEventListener('mouseover', showTooltip);
       item[0].addEventListener('mouseout', hideTooltip);
+    });
+  }
+
+  highlightLinkedElement(value: string) {
+    let res: number;
+    this.items.forEach((el, i) => {
+      let tooltip: HTMLDivElement;
+      if (el[0].getAttribute('item') == value) {
+        res = i;
+        this.items[res][0].classList.add('shadow');
+        if (!this.tooltipVisible) {
+          this.tooltipVisible = true;
+          tooltip = createElement('div', ['tooltip'], el[0], el[1]);
+        }
+      }
+    });
+  }
+
+  removeHighlightFromLinkedElement(value: string) {
+    let tooltip: HTMLDivElement;
+    let res: number;
+    let lastChild: HTMLDivElement;
+
+    this.items.forEach((el, i) => {
+      if (el[0].getAttribute('item') == value) {
+        res = i;
+        this.items[res][0].classList.remove('shadow');
+        lastChild = this.items[res][0].lastChild as HTMLDivElement;
+        if (lastChild && lastChild.className === 'tooltip') {
+          this.items[res][0].removeChild(lastChild);
+          this.tooltipVisible = false;
+        }
+      }
     });
   }
 }

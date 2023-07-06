@@ -116,8 +116,14 @@ class Viewer {
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
-    this.elemSet = this.elemSet.splice(1);
     this.highlightElement();
+    this.highlightLinkedElement();
+    this.removeHighlightLinkedElement();
+  }
+
+  personalizeElemSet() {
+    this.elemSet = this.elemSet.splice(1);
+    this.elemSet.map((el, i) => el.setAttribute('item', `${i}`));
   }
 
   highlightElement() {
@@ -177,21 +183,26 @@ class Viewer {
     });
   }
 
-  // highlightElemOnBlanket() {
-  //   let num: number = -1;
-  //   this.elemSet.forEach((elem, i) => {
-  //     elem.addEventListener('mouseover', (e: MouseEvent) => {
-  //       if (e.target) {
-  //         num = i;
-  //       }
-  //     })
-  //   });
-  //   this.emitter.emit('highlightElement', num);
-  // }
+  highlightLinkedElement() {
+    this.personalizeElemSet();
+    this.elemSet.forEach((el) => {
+      el.addEventListener('mouseover', () => {
+        const ident = el.getAttribute('item');
+        if (typeof ident === 'string') {
+          this.emitter.emit('highlightElement', ident);
+        }
+      });
+    });
+  }
 
-  showTheTooltip() {
-    this.elements.forEach((item) => {
-      item.addEventListener('mouseover', () => {});
+  removeHighlightLinkedElement() {
+    this.elemSet.forEach((el) => {
+      el.addEventListener('mouseout', () => {
+        const ident = el.getAttribute('item');
+        if (typeof ident === 'string') {
+          this.emitter.emit('removeHighlightElement', ident);
+        }
+      });
     });
   }
 }
