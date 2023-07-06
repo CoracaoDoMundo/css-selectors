@@ -120,7 +120,7 @@ class Viewer {
     this.highlightLinkedElement();
     this.removeHighlightLinkedElement();
     this.emitter.subscribe(
-      'highlightElement',
+      'highlightElementInViewer',
       this.highlightElementFromBlanketHover.bind(this)
     );
     this.emitter.subscribe('removeHighlightElementFromViewer', this.removeHighlightElementFromBlanketHover.bind(this));

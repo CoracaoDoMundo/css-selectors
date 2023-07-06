@@ -105,7 +105,7 @@ class Blanket {
     this.items.forEach((item, i) => {
       item[0].addEventListener('mouseover', (e) => {
         item[0].classList.add('shadow');
-        this.emitter.emit('highlightElement', `${i}`);
+        this.emitter.emit('highlightElementInViewer', `${i}`);
         if (e.relatedTarget instanceof HTMLDivElement) {
           e.relatedTarget.classList.remove('shadow');
         }
