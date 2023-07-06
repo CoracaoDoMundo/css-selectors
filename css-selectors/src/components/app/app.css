@@ -95,7 +95,8 @@
   height: 105px;
 }
 
-.ringImg {
+.ringImg,
+.hatImg {
   width: 130px;
   height: 130px;
 }
@@ -110,8 +111,6 @@
   height: 140px;
 }
 
-.strawberryImg,
-.strawberryFruitImg,
 .strawberryFruitButBerryImg {
   width: 110px;
   height: 80px;
@@ -139,22 +138,13 @@
   height: 120px;
 }
 
-.hatImg {
-  width: 130px;
-  height: 130px;
-}
-
 .maskImg {
   transform: rotate(50deg);
   width: 100px;
   height: 90px;
 }
 
-.watermelonFruitImg {
-  width: 80px;
-  height: 100px;
-}
-
+.watermelonFruitImg,
 .avocadoFruitImg {
   width: 80px;
   height: 100px;
@@ -213,22 +203,22 @@
 
 @keyframes shake {
   0% {
-    transform:translateX(10px);
+    transform: translateX(10px);
   }
   20% {
-    transform:translateX(-10px);
+    transform: translateX(-10px);
   }
   40% {
-    transform:translateX(10px);
+    transform: translateX(10px);
   }
   60% {
-    transform:translateX(-10px);
+    transform: translateX(-10px);
   }
   80% {
-    transform:translateX(10px);
+    transform: translateX(10px);
   }
   100% {
-    transform:translateX(-10px);
+    transform: translateX(-10px);
   }
 }
 
@@ -238,7 +228,7 @@
 
 @keyframes fly {
   0% {
-    transform:translateY(0);
+    transform: translateY(0);
     opacity: 1;
   }
   100% {
@@ -404,6 +394,7 @@
 .levelItemBlock {
   display: flex;
   cursor: pointer;
+  padding-right: 10px;
 }
 
 .levelMark {
@@ -454,4 +445,265 @@
   background-image: url(../../assets/img/rsLogo.svg);
   height: 20px;
   width: 100px;
+}
+
+@media (max-width: 1000px) {
+  .slatesImg {
+    width: 15%;
+    height: 55%;
+  }
+
+  .ringImg,
+  .hatImg {
+    width: 22%;
+    height: 65%;
+  }
+
+  .ringRopesImg {
+    width: 25%;
+    height: 70%;
+  }
+
+  .plateImg {
+    width: 23%;
+    height: 65%;
+  }
+
+  .strawberryFruitButBerryImg {
+    width: 80%;
+    height: 65%;
+  }
+
+  .starImg {
+    width: 15%;
+    height: 45%;
+  }
+
+  .glassesImg,
+  .glassesHeartsImg {
+    transform: rotate(50deg);
+    width: 60px;
+    height: 25px;
+  }
+
+  .bookImg {
+    width: 23%;
+    height: 50%;
+  }
+
+  .bookClosedImg {
+    width: 13%;
+    height: 50%;
+  }
+
+  .maskImg {
+    transform: rotate(50deg);
+    width: 18%;
+    height: 48%;
+  }
+
+  .watermelonFruitImg,
+  .avocadoFruitImg {
+    width: 63%;
+    height: 70%;
+  }
+
+  .shellImg {
+    transform: rotate(-30deg);
+    width: 15%;
+    height: 43%;
+  }
+
+  .flippersImg {
+    width: 15%;
+    height: 60%;
+  }
+}
+
+@media (max-width: 950px) {
+  .body {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .slatesImg {
+    width: 15%;
+    height: 45%;
+  }
+
+  .ringImg,
+  .hatImg {
+    width: 22%;
+    height: 55%;
+  }
+
+  .ringRopesImg {
+    width: 25%;
+    height: 60%;
+  }
+
+  .plateImg {
+    width: 21%;
+    height: 50%;
+  }
+
+  .strawberryFruitButBerryImg {
+    width: 70%;
+    height: 50%;
+  }
+
+  .starImg {
+    width: 15%;
+    height: 38%;
+  }
+
+  .glassesImg,
+  .glassesHeartsImg {
+    transform: rotate(50deg);
+    width: 60px;
+    height: 25px;
+  }
+
+  .bookImg {
+    width: 23%;
+    height: 43%;
+  }
+
+  .bookClosedImg {
+    width: 13%;
+    height: 43%;
+  }
+
+  .maskImg {
+    transform: rotate(50deg);
+    width: 18%;
+    height: 40%;
+  }
+
+  .watermelonFruitImg,
+  .avocadoFruitImg {
+    width: 55%;
+    height: 60%;
+  }
+
+  .shellImg {
+    transform: rotate(-30deg);
+    width: 15%;
+    height: 35%;
+  }
+
+  .flippersImg {
+    width: 15%;
+    height: 50%;
+  }
+}
+
+@media (max-width: 750px) {
+  .body {
+    font-size: 0.7rem;
+  }
+
+  .codeField {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editorNums,
+  .viewerNums {
+    display: none;
+  }
+
+  .editorHeaderLine {
+    order: 3;
+  }
+
+  .viewerHeaderLine {
+    order: 1;
+  }
+
+  .codingFieldBlock {
+    order: 4;
+  }
+
+  .codeViewerBlock {
+    order: 2;
+  }
+
+  .blanket {
+    height: 150px;
+  }
+
+  .levelHeader {
+    margin: 0.5rem 0;
+  }
+
+  .ringImg,
+  .hatImg {
+    width: 18%;
+    height: 55%;
+  }
+
+  .ringRopesImg {
+    width: 22%;
+    height: 60%;
+  }
+
+  .plateImg {
+    width: 21%;
+    height: 60%;
+  }
+
+  .strawberryFruitButBerryImg {
+    width: 70%;
+    height: 50%;
+  }
+
+  .starImg {
+    width: 13%;
+    height: 38%;
+  }
+
+  .glassesImg,
+  .glassesHeartsImg {
+    transform: rotate(50deg);
+    width: 50px;
+    height: 20px;
+  }
+
+  .bookImg {
+    width: 20%;
+    height: 43%;
+  }
+
+  .bookClosedImg {
+    width: 11%;
+    height: 43%;
+  }
+
+  .maskImg {
+    transform: rotate(50deg);
+    width: 16%;
+    height: 40%;
+  }
+
+  .flippersImg {
+    width: 15%;
+    height: 55%;
+  }
+}
+
+@media (max-width: 700px) {
+  .body {
+    font-size: 0.7rem;
+  }
+
+  .levelMark {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .tooltip {
+    top: -70px;
+  }
 }

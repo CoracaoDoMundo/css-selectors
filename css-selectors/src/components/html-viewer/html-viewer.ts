@@ -9,16 +9,14 @@ class Viewer {
   public viewer: HTMLDivElement = document.createElement('div');
   public preBlock: HTMLPreElement = document.createElement('pre');
   public elements: HTMLDivElement[] = [];
+  public elemSet: HTMLDivElement[] = [];
   private emitter: EventEmitter;
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
   }
 
-  draw(
-    container: HTMLDivElement,
-    activeLevel: number,
-  ): void {
+  draw(container: HTMLDivElement, activeLevel: number): void {
     this.viewer.classList.add('codeViewerBlock');
     container.append(this.viewer);
     this.preBlock.classList.add('codeTextContainer');
@@ -27,8 +25,12 @@ class Viewer {
     this.fillViewerField(activeLevel);
     this.emitter.subscribe('levelNumberChanged', () => {
       this.elements = [];
+      this.elemSet = [];
     });
-    this.emitter.subscribe('levelNumberChanged', this.fillViewerField.bind(this));
+    this.emitter.subscribe(
+      'levelNumberChanged',
+      this.fillViewerField.bind(this)
+    );
   }
 
   fillViewerField(activeLevel: number): void {
@@ -51,7 +53,8 @@ class Viewer {
         if (el.attribute) {
           const attr = `attr="${el.attribute}"`;
           elemName += attr;
-          let attrName = el.attribute.slice(0, 1).toUpperCase() + el.attribute.slice(1);
+          let attrName =
+            el.attribute.slice(0, 1).toUpperCase() + el.attribute.slice(1);
           tag += ` ${attrName}`;
         }
         if (el.id) {
@@ -69,6 +72,7 @@ class Viewer {
           );
           elem.setAttribute('tag', tag);
           this.elements.push(elem);
+          this.elemSet.push(elem);
           elem.style.paddingLeft = `${el.nesting}rem`;
           hljs.highlightBlock(elem);
         } else {
@@ -87,6 +91,7 @@ class Viewer {
           elemStart.setAttribute('tag', tag);
           elemStart.setAttribute('link', random);
           this.elements.push(elemStart);
+          this.elemSet.push(elemStart);
           const elemChild: HTMLDivElement = createElement(
             'div',
             ['childrenContainer'],
@@ -111,15 +116,15 @@ class Viewer {
       }
     };
     res(this.preBlock, LevelsList[activeLevel]);
+    this.elemSet = this.elemSet.splice(1);
     this.highlightElement();
   }
 
   highlightElement() {
     this.elements.forEach((item) => {
-      // console.log('this.elements, html:', item);
       item.addEventListener('mouseover', () => {
         if (item.getAttribute('tag') !== 'div Blanket') {
-            this.emitter.emit('highlightElement', item);
+          this.emitter.emit('highlightElement', item);
           item.classList.add('highlight');
           this.elements.forEach((elem) => {
             if (
@@ -146,7 +151,7 @@ class Viewer {
     });
     this.elements.forEach((item) => {
       item.addEventListener('mouseout', () => {
-          this.emitter.emit('removeHighlightElement', item);
+        this.emitter.emit('removeHighlightElement', item);
         item.classList.remove('highlight');
         this.elements.forEach((elem) => {
           if (
@@ -172,9 +177,21 @@ class Viewer {
     });
   }
 
+  // highlightElemOnBlanket() {
+  //   let num: number = -1;
+  //   this.elemSet.forEach((elem, i) => {
+  //     elem.addEventListener('mouseover', (e: MouseEvent) => {
+  //       if (e.target) {
+  //         num = i;
+  //       }
+  //     })
+  //   });
+  //   this.emitter.emit('highlightElement', num);
+  // }
+
   showTheTooltip() {
     this.elements.forEach((item) => {
-      item.addEventListener('mouseup', () => {});
+      item.addEventListener('mouseover', () => {});
     });
   }
 }

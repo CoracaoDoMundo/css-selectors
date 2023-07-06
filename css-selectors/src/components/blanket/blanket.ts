@@ -7,7 +7,6 @@ import EventEmitter from '../event-emitter';
 class Blanket {
   public blanket: HTMLDivElement = document.createElement('div');
   public items: [HTMLDivElement, string][] = [];
-  //   private activeTooltip: HTMLDivElement | null = null;
   private emitter: EventEmitter;
 
   constructor() {
@@ -116,17 +115,25 @@ class Blanket {
     });
   }
 
-  highlightElementFromDom(elem: HTMLDivElement) {
-    const value: string = (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
-    this.items.forEach((item) => {
-      if (item[0].classList.contains(value)) {
-        item[0].classList.add('shadow');
-      }
-    });
-  }
+    highlightElementFromDom(elem: HTMLDivElement) {
+      const value: string = (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
+      this.items.forEach((item) => {
+        if (item[0].classList.contains(value)) {
+          item[0].classList.add('shadow');
+        }
+      });
+      // this.items[num][0].classList.add('shadow');
+    }
+
+//   highlightElementFromDom(num: number) {
+//     if (num >= 0 && num < 10) {
+//       this.items[num][0].classList.add('shadow');
+//     }
+//   }
 
   removeHighlightElementFromDom(elem: HTMLDivElement) {
-    const value: string = (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
+    const value: string =
+      (elem.getAttribute('tag') ?? '').replace(/ /g, '') + 'Img';
     this.items.forEach((item) => {
       if (item[0].classList.contains(value)) {
         item[0].classList.remove('shadow');
@@ -143,7 +150,6 @@ class Blanket {
         if (!tooltipVisible) {
           tooltipVisible = true;
           tooltip = createElement('div', ['tooltip'], item[0], item[1]);
-          //   this.activeTooltip = tooltip;
         }
       };
 
@@ -152,7 +158,6 @@ class Blanket {
         if (!relatedTarget || !item[0].contains(relatedTarget)) {
           if (tooltip) {
             item[0].removeChild(tooltip);
-            // this.activeTooltip = null;
             tooltipVisible = false;
           }
         }
