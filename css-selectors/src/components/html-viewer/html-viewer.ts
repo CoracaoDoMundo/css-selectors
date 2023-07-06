@@ -119,6 +119,11 @@ class Viewer {
     this.highlightElement();
     this.highlightLinkedElement();
     this.removeHighlightLinkedElement();
+    this.emitter.subscribe(
+      'highlightElement',
+      this.highlightElementFromBlanketHover.bind(this)
+    );
+    this.emitter.subscribe('removeHighlightElementFromViewer', this.removeHighlightElementFromBlanketHover.bind(this));
   }
 
   personalizeElemSet() {
@@ -203,6 +208,40 @@ class Viewer {
           this.emitter.emit('removeHighlightElement', ident);
         }
       });
+    });
+  }
+
+  highlightElementFromBlanketHover(item: string) {
+    let link: string | null;
+    this.elemSet.forEach((el) => {
+      if (el.getAttribute('item') === item) {
+        el.classList.add('highlight');
+        if (el.getAttribute('link')) {
+          link = el.getAttribute('link');
+        }
+        this.elements.forEach((elem) => {
+          if (elem.getAttribute('link') === link) {
+            elem.classList.add('highlight');
+          }
+        });
+      }
+    });
+  }
+
+  removeHighlightElementFromBlanketHover(item: string) {
+    let link: string | null;
+    this.elemSet.forEach((el) => {
+      if (el.getAttribute('item') === item) {
+        el.classList.remove('highlight');
+        if (el.getAttribute('link')) {
+          link = el.getAttribute('link');
+        }
+        this.elements.forEach((elem) => {
+          if (elem.getAttribute('link') === link) {
+            elem.classList.remove('highlight');
+          }
+        });
+      }
     });
   }
 }

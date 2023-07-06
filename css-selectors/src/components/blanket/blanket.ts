@@ -102,16 +102,18 @@ class Blanket {
   }
 
   highlightElement() {
-    this.items.forEach((item) => {
+    this.items.forEach((item, i) => {
       item[0].addEventListener('mouseover', (e) => {
         item[0].classList.add('shadow');
+        this.emitter.emit('highlightElement', `${i}`);
         if (e.relatedTarget instanceof HTMLDivElement) {
           e.relatedTarget.classList.remove('shadow');
         }
       });
     });
-    this.items.forEach((item) => {
+    this.items.forEach((item, i) => {
       item[0].addEventListener('mouseout', () => {
+        this.emitter.emit('removeHighlightElementFromViewer', `${i}`);
         item[0].classList.remove('shadow');
       });
     });

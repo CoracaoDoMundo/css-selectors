@@ -1,5 +1,3 @@
-// Create element function
-
 const createElement = <T extends HTMLElement>(
   tagName: keyof HTMLElementTagNameMap,
   classNames: string[],
