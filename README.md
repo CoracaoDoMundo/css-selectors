@@ -15,7 +15,7 @@ Realization:
 
 1. Responsive layout (min-width: 500px), design
 2. 10 different levels implementation
-3. Connection between code and visualisation blocks (highlight of the elements + tooltips)
+3. Connection between code and visualization blocks (highlight of the elements + tooltips)
 4. Code highlight by highlight.js library
 5. Reset of the game option
 6. Hint button 
