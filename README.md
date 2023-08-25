@@ -3,7 +3,7 @@ Prototype - https://flukeout.github.io/
 
 Study project with RS_School 07/2023, 2 stage
 
-Deploy: https://rolling-scopes-school.github.io/coracaodomundo-JSFE2023Q1/css-selectors/
+Deploy: https://coracaodomundo.github.io/css-selectors/css-selectors/
 
 Realization:
 - Webpack
