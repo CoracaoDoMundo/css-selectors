@@ -1,11 +1,13 @@
-CSS selectors studying game
+## CSS selectors studying game
+
 Prototype - https://flukeout.github.io/
 
-Study project with RS_School 07/2023, 2 stage
+Study project with RS_School 07/2023, 2nd stage
 
-Deploy: https://coracaodomundo.github.io/css-selectors/css-selectors/
+Deploy: [link](https://coracaodomundo.github.io/css-selectors/)
+###
 
-Realization:
+### Stack:
 - Webpack
 - Eslint (airbnb config)
 - TypeScript
@@ -13,6 +15,7 @@ Realization:
 - highlight.js
 - Implementation on classes, module structure
 
+### Features:
 1. Responsive layout (min-width: 500px), design
 2. 10 different levels implementation
 3. Connection between code and visualization blocks (highlight of the elements + tooltips)
