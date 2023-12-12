@@ -1,8 +1,8 @@
 import { createElement } from '../service-functions';
 import EventEmitter from '../event-emitter';
 import Levels from '../levels/levels';
-import Blanket from '../../components/blanket/blanket';
-import { RightAnswersList } from '../input/config';
+import Blanket from '../blanket/blanket';
+import { RightAnswersList } from './config';
 
 class Input {
   public input: HTMLInputElement = document.createElement('input');
