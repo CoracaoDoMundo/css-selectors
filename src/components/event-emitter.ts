@@ -1,11 +1,16 @@
-import { Event } from '../types/index';
+import {
+  CallbackEvent,
+  Cb,
+  CbCheckOfAnswer,
+  CbDrawOrChangeLevel,
+  CbFillViewerField,
+  CbHighlightOrRemoveLinkedElement,
+} from "../types/index";
 
 class EventEmitter {
-
   private static instance: EventEmitter;
-  public events: Event = {};
 
-  private constructor() {}
+  public events: CallbackEvent = {};
 
   public static getInstance(): EventEmitter {
     if (!EventEmitter.instance) {
@@ -14,20 +19,47 @@ class EventEmitter {
     return EventEmitter.instance;
   }
 
-  subscribe(eventName: string, cb: Function) {
+  public subscribe(
+    eventName: string,
+    cb:
+      | Cb
+      | CbDrawOrChangeLevel
+      | CbHighlightOrRemoveLinkedElement
+      | CbFillViewerField
+      | CbCheckOfAnswer
+  ): void {
     if (this.events[eventName] === undefined) {
       this.events[eventName] = [];
     }
     this.events[eventName].push(cb);
   }
-  unsubscribe(eventName: string, cb: Function) {
+
+  public unsubscribe(
+    eventName: string,
+    cb:
+      | Cb
+      | CbDrawOrChangeLevel
+      | CbHighlightOrRemoveLinkedElement
+      | CbFillViewerField
+      | CbCheckOfAnswer
+  ): void {
     this.events[eventName] = this.events[eventName].filter(
       (func) => cb !== func
     );
   }
-  emit(eventName: string, args?: number | HTMLDivElement | string) {
+
+  public emit(
+    eventName: string,
+    args?: number | HTMLDivElement | string
+  ): void {
     if (this.events[eventName] !== undefined) {
-      this.events[eventName].forEach((func) => func.call(null, args));
+      this.events[eventName].forEach((func) => {
+        // console.log("func:", func);
+        // console.log("args:", args);
+        // func.call(null, args);
+        //@ts-ignore
+        func(args);
+      });
     }
   }
 }

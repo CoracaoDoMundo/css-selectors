@@ -7,17 +7,17 @@ export interface Icon {
   pathThird?: string;
 }
 
-export enum levelNames {
-  'Tag name selector' = 1,
-  'Id selector (#id)',
-  'Class selector (.class)',
-  'Universal selector (*)',
-  'Selector by attribute',
-  'Selectors group by comma',
-  'Element with class',
-  'Nesting with space',
-  'First adjacent element (+)',
-  'Any adjacent element (~)',
+export enum LevelNames {
+  "Tag name selector" = 1,
+  "Id selector (#id)",
+  "Class selector (.class)",
+  "Universal selector (*)",
+  "Selector by attribute",
+  "Selectors group by comma",
+  "Element with class",
+  "Nesting with space",
+  "First adjacent element (+)",
+  "Any adjacent element (~)",
 }
 
 export interface Level {
@@ -31,6 +31,26 @@ export interface Level {
   child?: Level[];
 }
 
-export type Event = {
-  [key: string]: Function[];
+export interface Event {}
+
+export type Cb = () => void;
+
+export type CbCheckOfAnswer = () => boolean;
+
+export type CbDrawOrChangeLevel = (levelNum: number) => void;
+
+export type CbHighlightOrRemoveLinkedElement = (value: string) => void;
+
+// export type CbHighlightOrRemoveElement = (value: HTMLDivElement) => void;
+
+export type CbFillViewerField = (activeLevel: number) => void;
+
+export type CallbackEvent = {
+  [key: string]: (
+    | Cb
+    | CbDrawOrChangeLevel
+    | CbHighlightOrRemoveLinkedElement
+    | CbFillViewerField
+    | CbCheckOfAnswer
+  )[];
 };

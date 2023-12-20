@@ -1,43 +1,46 @@
-import { createElement } from '../service-functions';
-import blanket from '../../assets/img/blanket.svg';
-import { Level } from '../../types/index';
-import { LevelsList } from '../levels/config';
-import EventEmitter from '../event-emitter';
+import { createElement } from "../service-functions";
+import blanket from "../../assets/img/blanket.svg";
+import { Level } from "../../types/index";
+import { LevelsList } from "../levels/config";
+import EventEmitter from "../event-emitter";
 
 class Blanket {
-  public blanket: HTMLDivElement = document.createElement('div');
+  public blanket: HTMLDivElement = document.createElement("div");
+
   public items: [HTMLDivElement, string][] = [];
+
   private emitter: EventEmitter;
-  private tooltipVisible: boolean = false;
+
+  private tooltipVisible = false;
 
   constructor() {
     this.emitter = EventEmitter.getInstance();
   }
 
-  draw(container: HTMLDivElement) {
-    this.blanket.classList.add('blanket');
+  public draw(container: HTMLDivElement): void {
+    this.blanket.classList.add("blanket");
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
   }
 
-  drawLevelItems(levelNum: number) {
-    this.blanket.innerHTML = '';
-    let res = (container: HTMLDivElement, levelPack: Level[]) => {
-      for (let el of levelPack) {
+  public drawLevelItems(levelNum: number): void {
+    this.blanket.innerHTML = "";
+    const res = (container: HTMLDivElement, levelPack: Level[]): void => {
+      levelPack.forEach((el) => {
         let name = `${el.selector}Img`;
         let title = `<${el.selector}></${el.selector}>`;
         if (el.id) {
-          let nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
+          const nameId = el.id.slice(0, 1).toUpperCase() + el.id.slice(1);
           name = `${el.selector}${nameId}Img`;
           title = `<${el.selector} id="${el.id}"></${el.selector}>`;
         }
         if (el.class) {
-          let nameClass =
+          const nameClass =
             el.class.slice(0, 1).toUpperCase() + el.class.slice(1);
           name = `${el.selector}${nameClass}Img`;
           title = `<${el.selector} class="${el.class}"></${el.selector}>`;
           if (el.attribute) {
-            let attrName =
+            const attrName =
               el.attribute.slice(0, 1).toUpperCase() + el.attribute.slice(1);
             name = `${el.selector}${nameClass}${attrName}Img`;
             title = `<${el.selector} class="${el.class}" attr="${el.attribute}"></${el.selector}>`;
@@ -45,28 +48,28 @@ class Blanket {
         }
         if (!el.child) {
           const pic: HTMLDivElement = createElement(
-            'div',
-            [`${name}`, 'img'],
+            "div",
+            [`${name}`, "img"],
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
           this.items.push([pic, title]);
           if (el.target) {
-            pic.classList.add('targetItem');
+            pic.classList.add("targetItem");
           }
-        } else if (el.child && el.class === 'blanket') {
+        } else if (el.child && el.class === "blanket") {
           res(container, el.child);
         } else {
           const pic: HTMLDivElement = createElement(
-            'div',
-            [`${name}`, 'img'],
+            "div",
+            [`${name}`, "img"],
             container
           );
           pic.style.backgroundImage = `url(${el.img})`;
           this.items.push([pic, title]);
           res(pic, el.child);
         }
-      }
+      });
     };
 
     res(this.blanket, LevelsList[levelNum]);
@@ -77,65 +80,65 @@ class Blanket {
     this.addTooltipOnElement();
   }
 
-  subscribes() {
-    this.emitter.subscribe('levelNumberChanged', () => {
+  public subscribes(): void {
+    this.emitter.subscribe("levelNumberChanged", () => {
       this.items = [];
     });
     this.emitter.subscribe(
-      'levelNumberChanged',
+      "levelNumberChanged",
       this.drawLevelItems.bind(this)
     );
     this.emitter.subscribe(
-      'highlightElement',
+      "highlightElement",
       this.highlightLinkedElement.bind(this)
     );
     this.emitter.subscribe(
-      'removeHighlightElement',
+      "removeHighlightElement",
       this.removeHighlightFromLinkedElement.bind(this)
     );
   }
 
-  elementsDisappearance() {
-    this.items.map((el) => {
-      el[0].classList.add('fly');
+  public elementsDisappearance(): void {
+    this.items.forEach((el) => {
+      el[0].classList.add("fly");
     });
   }
 
-  highlightElement() {
+  public highlightElement(): void {
     this.items.forEach((item, i) => {
-      item[0].addEventListener('mouseover', (e) => {
-        item[0].classList.add('shadow');
-        this.emitter.emit('highlightElementInViewer', `${i}`);
+      item[0].addEventListener("mouseover", (e) => {
+        item[0].classList.add("shadow");
+        this.emitter.emit("highlightElementInViewer", `${i}`);
         if (e.relatedTarget instanceof HTMLDivElement) {
-          e.relatedTarget.classList.remove('shadow');
+          e.relatedTarget.classList.remove("shadow");
         }
       });
     });
     this.items.forEach((item, i) => {
-      item[0].addEventListener('mouseout', () => {
-        this.emitter.emit('removeHighlightElementFromViewer', `${i}`);
-        item[0].classList.remove('shadow');
+      item[0].addEventListener("mouseout", () => {
+        this.emitter.emit("removeHighlightElementFromViewer", `${i}`);
+        item[0].classList.remove("shadow");
       });
     });
   }
 
-  personalizeItems() {
-    this.items.map((el, i) => el[0].setAttribute('item', `${i}`));
+  public personalizeItems(): void {
+    this.items.map((el, i) => el[0].setAttribute("item", `${i}`));
   }
 
-  addTooltipOnElement() {
+  public addTooltipOnElement(): void {
     this.items.forEach((item) => {
       let tooltip: HTMLDivElement;
-      let tooltipVisible: boolean = false;
+      let tooltipVisible = false;
 
-      const showTooltip = (e: MouseEvent) => {
+      const showTooltip = (): void => {
         if (!tooltipVisible) {
           tooltipVisible = true;
-          tooltip = createElement('div', ['tooltip'], item[0], item[1]);
+          tooltip = createElement("div", ["tooltip"], item[0], item[1]);
         }
       };
 
-      const hideTooltip = (e: MouseEvent) => {
+      const hideTooltip = (e: MouseEvent): void => {
         const relatedTarget = e.relatedTarget as Node;
         if (!relatedTarget || !item[0].contains(relatedTarget)) {
           if (tooltip) {
@@ -145,37 +148,35 @@ class Blanket {
         }
       };
 
-      item[0].addEventListener('mouseover', showTooltip);
-      item[0].addEventListener('mouseout', hideTooltip);
+      item[0].addEventListener("mouseover", showTooltip);
+      item[0].addEventListener("mouseout", hideTooltip);
     });
   }
 
-  highlightLinkedElement(value: string) {
+  public highlightLinkedElement(value: string): void {
     let res: number;
     this.items.forEach((el, i) => {
-      let tooltip: HTMLDivElement;
-      if (el[0].getAttribute('item') == value) {
+      if (el[0].getAttribute("item") === value) {
         res = i;
-        this.items[res][0].classList.add('shadow');
+        this.items[res][0].classList.add("shadow");
         if (!this.tooltipVisible) {
           this.tooltipVisible = true;
-          tooltip = createElement('div', ['tooltip'], el[0], el[1]);
+          createElement("div", ["tooltip"], el[0], el[1]);
         }
       }
     });
   }
 
-  removeHighlightFromLinkedElement(value: string) {
-    let tooltip: HTMLDivElement;
+  public removeHighlightFromLinkedElement(value: string): void {
     let res: number;
     let lastChild: HTMLDivElement;
 
     this.items.forEach((el, i) => {
-      if (el[0].getAttribute('item') == value) {
+      if (el[0].getAttribute("item") === value) {
         res = i;
-        this.items[res][0].classList.remove('shadow');
+        this.items[res][0].classList.remove("shadow");
         lastChild = this.items[res][0].lastChild as HTMLDivElement;
-        if (lastChild && lastChild.className === 'tooltip') {
+        if (lastChild && lastChild.className === "tooltip") {
           this.items[res][0].removeChild(lastChild);
           this.tooltipVisible = false;
         }

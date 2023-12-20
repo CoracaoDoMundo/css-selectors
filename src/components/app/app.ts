@@ -1,9 +1,10 @@
-import './app.css';
-import AppLayout from './app-layout';
-import EventEmitter from '../event-emitter';
+import "./app.css";
+import AppLayout from "./app-layout";
+import EventEmitter from "../event-emitter";
 
 class App {
   private layout: AppLayout;
+
   private emitter: EventEmitter;
 
   constructor() {
@@ -11,7 +12,7 @@ class App {
     this.emitter = EventEmitter.getInstance();
   }
 
-  start() {
+  public start(): void {
     this.layout.draw();
   }
 }
