@@ -1,6 +1,6 @@
-import { Event } from "./index";
+import { Event } from "../index";
 
-export class LevelNumberChange implements Event {
+export class LevelNumberChanged implements Event {
   public newNumber: number;
 
   constructor(newNumber: number) {

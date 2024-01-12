@@ -2,8 +2,11 @@ import hljs from "highlight.js/lib/core";
 import xml from "highlight.js/lib/languages/xml";
 import { createElement } from "../service-functions";
 import { LevelsList } from "../levels/config";
-import { Level } from "../../types/index";
+import { Level, Event } from "../../types/index";
 import EventEmitter from "../event-emitter";
+import { RemoveHighlightElement } from "../../types/events/remove-highlight-element";
+import { HighlightElement } from "../../types/events/highlight-element";
+import { LevelNumberChanged } from "../../types/events/level-number-changed";
 
 hljs.registerLanguage("xml", xml);
 
@@ -24,6 +27,26 @@ class Viewer {
     this.emitter = EventEmitter.getInstance();
   }
 
+  public subscribeToLevelChangedEvent(event: Event): void {
+    if (event instanceof LevelNumberChanged) {
+      this.fillViewerField(event.getNumber());
+    }
+  }
+
+  public subscribeToHighlightElementEvent(event: Event): void {
+    if (event instanceof HighlightElement) {
+      const elem = event.getElementIdent();
+      this.highlightElementFromBlanketHover(elem);
+    }
+  }
+
+  public subscribeToRemoveHighlightElementEvent(event: Event): void {
+    if (event instanceof RemoveHighlightElement) {
+      const elem = event.getElementIdent();
+      this.removeHighlightElementFromBlanketHover(elem);
+    }
+  }
+
   public draw(container: HTMLDivElement, activeLevel: number): void {
     this.viewer.classList.add("codeViewerBlock");
     container.append(this.viewer);
@@ -31,14 +54,12 @@ class Viewer {
     this.viewer.append(this.preBlock);
     this.highlightElement();
     this.fillViewerField(activeLevel);
-    this.emitter.subscribe("levelNumberChanged", () => {
+
+    this.emitter.subscribe("levelNumberChanged", (event) => {
+      this.subscribeToLevelChangedEvent(event);
       this.elements = [];
       this.elemSet = [];
     });
-    this.emitter.subscribe(
-      "levelNumberChanged",
-      this.fillViewerField.bind(this)
-    );
   }
 
   public createStartElement(
@@ -93,8 +114,8 @@ class Viewer {
     elemEnd: HTMLDivElement,
     elemChild: HTMLDivElement
   ): void {
-    hljs.highlightBlock(elemStart);
-    hljs.highlightBlock(elemEnd);
+    hljs.highlightElement(elemStart);
+    hljs.highlightElement(elemEnd);
     if (el.child) {
       this.drawActiveLevel(elemChild, el.child);
     }
@@ -139,7 +160,7 @@ class Viewer {
         this.elements.push(elem);
         this.elemSet.push(elem);
         elem.style.paddingLeft = `${el.nesting}rem`;
-        hljs.highlightBlock(elem);
+        hljs.highlightElement(elem);
       } else {
         this.formRandomNum(randomArr);
         const elemStart = this.createStartElement(
@@ -164,16 +185,13 @@ class Viewer {
   public fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = "";
     this.drawActiveLevel(this.preBlock, LevelsList[activeLevel]);
-    this.highlightElement();
     this.highlightLinkedElement();
     this.removeHighlightLinkedElement();
-    this.emitter.subscribe(
-      "highlightElementInViewer",
-      this.highlightElementFromBlanketHover.bind(this)
+    this.emitter.subscribe("highlightElementInViewer", (event) =>
+      this.subscribeToHighlightElementEvent(event)
     );
-    this.emitter.subscribe(
-      "removeHighlightElementFromViewer",
-      this.removeHighlightElementFromBlanketHover.bind(this)
+    this.emitter.subscribe("removeHighlightElementFromViewer", (event) =>
+      this.subscribeToRemoveHighlightElementEvent(event)
     );
   }
 
@@ -186,7 +204,8 @@ class Viewer {
     this.elements.forEach((item) => {
       item.addEventListener("mouseover", () => {
         if (item.getAttribute("tag") !== "div Blanket") {
-          this.emitter.emit("highlightElement", item);
+          const elemIdent = item.getAttribute("item");
+          if (elemIdent) this.emitter.emit(new HighlightElement(elemIdent));
           item.classList.add("highlight");
           this.elements.forEach((elem) => {
             if (
@@ -213,7 +232,8 @@ class Viewer {
     });
     this.elements.forEach((item) => {
       item.addEventListener("mouseout", () => {
-        this.emitter.emit("removeHighlightElement", item);
+        const elemIdent = item.getAttribute("item");
+        if (elemIdent) this.emitter.emit(new RemoveHighlightElement(elemIdent));
         item.classList.remove("highlight");
         this.elements.forEach((elem) => {
           if (
@@ -245,7 +265,8 @@ class Viewer {
       el.addEventListener("mouseover", () => {
         const ident = el.getAttribute("item");
         if (typeof ident === "string") {
-          this.emitter.emit("highlightElement", ident);
+          const highlightElementEvent = new HighlightElement(ident);
+          this.emitter.emit(highlightElementEvent);
         }
       });
     });
@@ -256,7 +277,8 @@ class Viewer {
       el.addEventListener("mouseout", () => {
         const ident = el.getAttribute("item");
         if (typeof ident === "string") {
-          this.emitter.emit("removeHighlightElement", ident);
+          const removeHighlightElementEvent = new RemoveHighlightElement(ident);
+          this.emitter.emit(removeHighlightElementEvent);
         }
       });
     });

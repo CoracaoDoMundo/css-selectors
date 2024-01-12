@@ -1,16 +1,13 @@
-import {
-  CallbackEvent,
-  Cb,
-  CbCheckOfAnswer,
-  CbDrawOrChangeLevel,
-  CbFillViewerField,
-  CbHighlightOrRemoveLinkedElement,
-} from "../types/index";
+import { Event, Cb } from "../types/index";
 
 class EventEmitter {
   private static instance: EventEmitter;
 
-  public events: CallbackEvent = {};
+  private eventHandlers: Map<string, Cb[]>;
+
+  constructor() {
+    this.eventHandlers = new Map();
+  }
 
   public static getInstance(): EventEmitter {
     if (!EventEmitter.instance) {
@@ -21,45 +18,28 @@ class EventEmitter {
 
   public subscribe(
     eventName: string,
-    cb:
-      | Cb
-      | CbDrawOrChangeLevel
-      | CbHighlightOrRemoveLinkedElement
-      | CbFillViewerField
-      | CbCheckOfAnswer
+    eventHandler: (event: Event) => void
   ): void {
-    if (this.events[eventName] === undefined) {
-      this.events[eventName] = [];
-    }
-    this.events[eventName].push(cb);
+    const existingHandlers = this.eventHandlers.get(eventName) || [];
+    this.eventHandlers.set(eventName, [...existingHandlers, eventHandler]);
   }
 
   public unsubscribe(
     eventName: string,
-    cb:
-      | Cb
-      | CbDrawOrChangeLevel
-      | CbHighlightOrRemoveLinkedElement
-      | CbFillViewerField
-      | CbCheckOfAnswer
+    eventHandler: (event: Event) => void
   ): void {
-    this.events[eventName] = this.events[eventName].filter(
-      (func) => cb !== func
-    );
+    this.eventHandlers.delete(eventHandler.name);
   }
 
-  public emit(
-    eventName: string,
-    args?: number | HTMLDivElement | string
-  ): void {
-    if (this.events[eventName] !== undefined) {
-      this.events[eventName].forEach((func) => {
-        // console.log("func:", func);
-        // console.log("args:", args);
-        // func.call(null, args);
-        //@ts-ignore
-        func(args);
-      });
+  public emit(event: Event): void {
+    const newStartLetter = event.constructor.name.split("")[0].toLowerCase();
+    const eventName = event.constructor.name
+      .split("")
+      .map((char, index) => (index === 0 ? newStartLetter : char))
+      .join("");
+    const handlersToCall = this.eventHandlers.get(eventName);
+    if (handlersToCall) {
+      handlersToCall.forEach((handler) => handler(event));
     }
   }
 }

@@ -1,8 +1,12 @@
 import { createElement } from "../service-functions";
 import blanket from "../../assets/img/blanket.svg";
-import { Level } from "../../types/index";
+import Levels from "../levels/levels";
+import { Level, Event } from "../../types/index";
 import { LevelsList } from "../levels/config";
 import EventEmitter from "../event-emitter";
+import { HighlightElement } from "../../types/events/highlight-element";
+import { RemoveHighlightElement } from "../../types/events/remove-highlight-element";
+import { LevelNumberChanged } from "../../types/events/level-number-changed";
 
 class Blanket {
   public blanket: HTMLDivElement = document.createElement("div");
@@ -13,7 +17,10 @@ class Blanket {
 
   private tooltipVisible = false;
 
-  constructor() {
+  public levels: Levels;
+
+  constructor(levels: Levels) {
+    this.levels = levels;
     this.emitter = EventEmitter.getInstance();
   }
 
@@ -21,6 +28,27 @@ class Blanket {
     this.blanket.classList.add("blanket");
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
+  }
+
+  public subscribeToLevelChangedEvent(event: Event): void {
+    if (event instanceof LevelNumberChanged) {
+      const newLevel = event.getNumber();
+      this.drawLevelItems(newLevel);
+    }
+  }
+
+  public subscribeToHighlightElementEvent(event: Event): void {
+    if (event instanceof HighlightElement) {
+      const elem = event.getElementIdent();
+      this.highlightLinkedElement(elem);
+    }
+  }
+
+  public subscribeToRemoveHighlightElementEvent(event: Event): void {
+    if (event instanceof RemoveHighlightElement) {
+      const elem = event.getElementIdent();
+      this.removeHighlightFromLinkedElement(elem);
+    }
   }
 
   public drawLevelItems(levelNum: number): void {
@@ -81,20 +109,15 @@ class Blanket {
   }
 
   public subscribes(): void {
-    this.emitter.subscribe("levelNumberChanged", () => {
+    this.emitter.subscribe("levelNumberChanged", (event) => {
+      this.subscribeToLevelChangedEvent(event);
       this.items = [];
     });
-    this.emitter.subscribe(
-      "levelNumberChanged",
-      this.drawLevelItems.bind(this)
+    this.emitter.subscribe("highlightElement", (event) =>
+      this.subscribeToHighlightElementEvent(event)
     );
-    this.emitter.subscribe(
-      "highlightElement",
-      this.highlightLinkedElement.bind(this)
-    );
-    this.emitter.subscribe(
-      "removeHighlightElement",
-      this.removeHighlightFromLinkedElement.bind(this)
+    this.emitter.subscribe("removeHighlightElement", (event) =>
+      this.subscribeToRemoveHighlightElementEvent(event)
     );
   }
 
@@ -105,18 +128,20 @@ class Blanket {
   }
 
   public highlightElement(): void {
-    this.items.forEach((item, i) => {
+    this.items.forEach((item) => {
       item[0].addEventListener("mouseover", (e) => {
         item[0].classList.add("shadow");
-        this.emitter.emit("highlightElementInViewer", `${i}`);
+        // const highlightElementEvent = new HighlightElement(i, item[0]);
+        // this.emitter.emit(highlightElementEvent);
         if (e.relatedTarget instanceof HTMLDivElement) {
           e.relatedTarget.classList.remove("shadow");
         }
       });
     });
-    this.items.forEach((item, i) => {
+    this.items.forEach((item) => {
       item[0].addEventListener("mouseout", () => {
-        this.emitter.emit("removeHighlightElementFromViewer", `${i}`);
+        // const removeHighlightElementEvent = new RemoveHighlightElement(i, item[0]);
+        // this.emitter.emit(removeHighlightElementEvent);
         item[0].classList.remove("shadow");
       });
     });
@@ -170,7 +195,6 @@ class Blanket {
   public removeHighlightFromLinkedElement(value: string): void {
     let res: number;
     let lastChild: HTMLDivElement;
-
     this.items.forEach((el, i) => {
       if (el[0].getAttribute("item") === value) {
         res = i;

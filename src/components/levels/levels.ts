@@ -1,6 +1,9 @@
 import { createElement } from "../service-functions";
-import { LevelNames } from "../../types/index";
+import { LevelNames, Event } from "../../types/index";
 import EventEmitter from "../event-emitter";
+import { ResetGame } from "../../types/events/reset-game";
+import { LevelNumberChanged } from "../../types/events/level-number-changed";
+import { GiveHint } from "../../types/events/give-hint";
 
 class Levels {
   public levelsBlock: HTMLDivElement = document.createElement("div");
@@ -33,6 +36,12 @@ class Levels {
     }
   }
 
+  public subscribeToLevelChangedEvent(event: Event): void {
+    if (event instanceof LevelNumberChanged) {
+      this.changeLevel(event);
+    }
+  }
+
   public restoreLocalStorage(): void {
     if (
       Number(localStorage.getItem("coracaoLevel")) > 0 &&
@@ -44,14 +53,14 @@ class Levels {
 
   public addListenersAndEmitter(): void {
     this.helpBtn.addEventListener("click", () => {
-      this.emitter.emit("giveHint");
+      const giveHintEvent = new GiveHint();
+      this.emitter.emit(giveHintEvent);
     });
     this.addListenerOnLevelsList();
-    this.emitter.subscribe("levelNumberChanged", this.changeLevel.bind(this));
-    this.emitter.subscribe(
-      "levelNumberChanged",
-      this.setLocalStorage.bind(this)
-    );
+    this.emitter.subscribe("levelNumberChanged", (event) => {
+      this.subscribeToLevelChangedEvent(event);
+      this.setLocalStorage.bind(this);
+    });
   }
 
   public drawLevelsBlock(levelsBlock: HTMLDivElement): void {
@@ -107,7 +116,7 @@ class Levels {
           el.removeChild(el.firstChild);
         }
       });
-      this.emitter.emit("resetGame");
+      this.emitter.emit(new ResetGame());
     });
     this.helpBtn.classList.add("btn", "btnLevelsBlock");
     levelsBlock.append(this.helpBtn);
@@ -121,14 +130,17 @@ class Levels {
         this.levelItems.map((item) => item.classList.remove("activeListItem"));
         el.classList.add("activeListItem");
         this.activeLevel = i;
-        this.emitter.emit("levelNumberChanged", this.activeLevel);
+        const levelNumberChangedEvent = new LevelNumberChanged(
+          this.activeLevel
+        );
+        this.emitter.emit(levelNumberChangedEvent);
       });
     });
   }
 
-  public changeLevel(activeLevel: number): void {
+  public changeLevel(event: LevelNumberChanged): void {
     this.levelItems.map((item) => item.classList.remove("activeListItem"));
-    this.levelItems[activeLevel].classList.add("activeListItem");
+    this.levelItems[event.getNumber()].classList.add("activeListItem");
   }
 
   public setLocalStorage(): void {

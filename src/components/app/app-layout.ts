@@ -20,7 +20,7 @@ class AppLayout {
 
   public levels = new Levels();
 
-  public blanket = new Blanket();
+  public blanket = new Blanket(this.levels);
 
   public viewerBlock = new Viewer();
 
@@ -122,7 +122,7 @@ class AppLayout {
       codingFieldBlock,
       `{\n /* Style would go here. */ \n}`
     );
-    hljs.highlightBlock(codeText);
+    hljs.highlightElement(codeText);
     this.viewerBlock.draw(codeField, this.levels.activeLevel);
   }
 

@@ -3,7 +3,10 @@ import EventEmitter from "../event-emitter";
 import Levels from "../levels/levels";
 import Blanket from "../blanket/blanket";
 import { RightAnswersList } from "./config";
-import { LevelNumberChange } from "../../types/level-number-change";
+import { LevelNumberChanged } from "../../types/events/level-number-changed";
+import { ResetGame } from "../../types/events/reset-game";
+import { GiveHint } from "../../types/events/give-hint";
+import { Event } from "../../types/index";
 
 class Input {
   public input: HTMLInputElement = document.createElement("input");
@@ -44,11 +47,8 @@ class Input {
       }
     });
 
-    this.emitter.subscribe(
-      "levelNumberChanged",
-      this.cbCheckOfAnswer.bind(this)
-    );
     this.emitter.subscribe("levelNumberChanged", () => {
+      this.cbCheckOfAnswer.bind(this);
       this.input.value = "";
     });
     this.emitter.subscribe("resetGame", this.resetProgress.bind(this));
@@ -59,8 +59,9 @@ class Input {
     );
   }
 
-  public cbCheckOfAnswer(event?: LevelNumberChange): boolean | void {
-    if (event instanceof LevelNumberChange) {
+  public cbCheckOfAnswer(event: Event): void {
+    if (event instanceof LevelNumberChanged) {
+      event.getNumber();
       this.checkOfAnswer();
     }
   }
@@ -109,7 +110,10 @@ class Input {
         } else if (this.levels.activeLevel === 9) {
           this.levels.activeLevel = 0;
         }
-        this.emitter.emit("levelNumberChanged", this.levels.activeLevel);
+        const levelChangeEvent = new LevelNumberChanged(
+          this.levels.activeLevel
+        );
+        this.emitter.emit(levelChangeEvent);
       }, 300);
       this.res = false;
     } else {
@@ -118,27 +122,32 @@ class Input {
     }
   }
 
-  public resetProgress(): void {
-    this.solved = 0;
-    this.levels.activeLevel = 0;
-    this.emitter.emit("levelNumberChanged", this.levels.activeLevel);
+  public resetProgress(event: Event): void {
+    if (event instanceof ResetGame) {
+      this.solved = 0;
+      this.levels.activeLevel = 0;
+      const levelChangeEvent = new LevelNumberChanged(this.levels.activeLevel);
+      this.emitter.emit(levelChangeEvent);
+    }
   }
 
-  public outputHint(): void {
-    this.hint = true;
-    const answer: string[] =
-      RightAnswersList[this.levels.activeLevel][0].split("");
-    let i = 0;
-    const show = (): void => {
-      this.input.value += answer[i];
-      if (i < answer.length - 1) {
-        i += 1;
-        setTimeout(() => show(), 300);
-      } else {
-        this.input.setAttribute("value", this.input.value);
-      }
-    };
-    setTimeout(() => show(), 300);
+  public outputHint(event: Event): void {
+    if (event instanceof GiveHint) {
+      this.hint = true;
+      const answer: string[] =
+        RightAnswersList[this.levels.activeLevel][0].split("");
+      let i = 0;
+      const show = (): void => {
+        this.input.value += answer[i];
+        if (i < answer.length - 1) {
+          i += 1;
+          setTimeout(() => show(), 300);
+        } else {
+          this.input.setAttribute("value", this.input.value);
+        }
+      };
+      setTimeout(() => show(), 300);
+    }
   }
 }
 

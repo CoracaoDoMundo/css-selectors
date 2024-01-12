@@ -33,7 +33,7 @@ export interface Level {
 
 export interface Event {}
 
-export type Cb = () => void;
+export type Cb = (event: Event) => void;
 
 export type CbCheckOfAnswer = () => boolean;
 
