@@ -185,6 +185,7 @@ class Viewer {
   public fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = "";
     this.drawActiveLevel(this.preBlock, LevelsList[activeLevel]);
+    this.highlightElement();
     this.highlightLinkedElement();
     this.removeHighlightLinkedElement();
     this.emitter.subscribe("highlightElementInViewer", (event) =>
