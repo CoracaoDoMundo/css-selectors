@@ -130,6 +130,7 @@ class Levels {
         this.levelItems.map((item) => item.classList.remove("activeListItem"));
         el.classList.add("activeListItem");
         this.activeLevel = i;
+        this.setLocalStorage();
         const levelNumberChangedEvent = new LevelNumberChanged(
           this.activeLevel
         );
