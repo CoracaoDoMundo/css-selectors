@@ -136,8 +136,8 @@ class Levels {
         );
         this.emitter.unsubscribeForEvent("highlightElement");
         this.emitter.unsubscribeForEvent("removeHighlightElement");
-        this.emitter.unsubscribeForEvent("highlightElementInViewer");
-        this.emitter.unsubscribeForEvent("removeHighlightElementInViewer");
+        this.emitter.unsubscribeForEvent("highlightBlanketElement");
+        this.emitter.unsubscribeForEvent("removeHighlightBlanketElement");
         this.emitter.emit(levelNumberChangedEvent);
       });
     });

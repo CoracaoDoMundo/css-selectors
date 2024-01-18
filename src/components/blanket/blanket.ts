@@ -156,20 +156,6 @@ class Blanket {
     this.items.map((el, i) => el[0].setAttribute("item", `${i}`));
   }
 
-  // public showTooltip(
-  //   item: [HTMLDivElement, string],
-  //   tooltipVisible: boolean
-  // ): [boolean, HTMLDivElement?] {
-  //   let tooltipNewVisibility = tooltipVisible;
-  //   if (!tooltipNewVisibility) {
-  //     tooltipNewVisibility = true;
-  //     const tooltip = createElement("div", ["tooltip"], item[0], item[1]);
-  //   }
-  //   return [tooltipNewVisibility, tooltip];
-  // }
-
-  // public hideTooltip(item: [], tooltipVisible: boolean): void {}
-
   public addTooltipOnElement(): void {
     this.items.forEach((item) => {
       let tooltip: HTMLDivElement;

@@ -32,12 +32,12 @@ class EventEmitter {
     // console.log("the handlers:", this.eventHandlers.get(eventName));
   }
 
-  public unsubscribe(
-    eventName: string,
-    eventHandler: (event: Event) => void
-  ): void {
-    this.eventHandlers.delete(eventHandler.name);
-  }
+  // public unsubscribe(
+  //   eventName: string,
+  //   eventHandler: (event: Event) => void
+  // ): void {
+  //   this.eventHandlers.delete(eventHandler.name);
+  // }
 
   public unsubscribeForEvent(eventName: string): void {
     this.eventHandlers.delete(eventName);

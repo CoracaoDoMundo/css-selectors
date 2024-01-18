@@ -54,7 +54,6 @@ class Viewer {
     container.append(this.viewer);
     this.preBlock.classList.add("codeTextContainer");
     this.viewer.append(this.preBlock);
-    // this.highlightElement();
     this.fillViewerField(activeLevel);
 
     this.emitter.subscribe("levelNumberChanged", (event) => {
@@ -187,13 +186,12 @@ class Viewer {
   public fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = "";
     this.drawActiveLevel(this.preBlock, LevelsList[activeLevel]);
-    // this.highlightElement();
     this.highlightLinkedElement();
     this.removeHighlightLinkedElement();
-    this.emitter.subscribe("highlightElementInViewer", (event) =>
+    this.emitter.subscribe("highlightBlanketElement", (event) =>
       this.subscribeToHighlightElementEvent(event)
     );
-    this.emitter.subscribe("removeHighlightElementInViewer", (event) =>
+    this.emitter.subscribe("removeHighlightBlanketElement", (event) =>
       this.subscribeToRemoveHighlightElementEvent(event)
     );
     this.highlightElement();
