@@ -186,8 +186,7 @@ class Viewer {
   public fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = "";
     this.drawActiveLevel(this.preBlock, LevelsList[activeLevel]);
-    this.highlightLinkedElement();
-    this.removeHighlightLinkedElement();
+    this.personalizeElemSet();
     this.emitter.subscribe("highlightBlanketElement", (event) =>
       this.subscribeToHighlightElementEvent(event)
     );
@@ -256,31 +255,6 @@ class Viewer {
             item.previousSibling.classList.remove("highlight");
           }
         });
-      });
-    });
-  }
-
-  public highlightLinkedElement(): void {
-    this.personalizeElemSet();
-    this.elemSet.forEach((el) => {
-      el.addEventListener("mouseover", () => {
-        const ident = el.getAttribute("item");
-        if (typeof ident === "string") {
-          const highlightElementEvent = new HighlightElement(ident);
-          this.emitter.emit(highlightElementEvent);
-        }
-      });
-    });
-  }
-
-  public removeHighlightLinkedElement(): void {
-    this.elemSet.forEach((el) => {
-      el.addEventListener("mouseout", () => {
-        const ident = el.getAttribute("item");
-        if (typeof ident === "string") {
-          const removeHighlightElementEvent = new RemoveHighlightElement(ident);
-          this.emitter.emit(removeHighlightElementEvent);
-        }
       });
     });
   }
