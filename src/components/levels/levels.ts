@@ -134,6 +134,10 @@ class Levels {
         const levelNumberChangedEvent = new LevelNumberChanged(
           this.activeLevel
         );
+        this.emitter.unsubscribeForEvent("highlightElement");
+        this.emitter.unsubscribeForEvent("removeHighlightElement");
+        this.emitter.unsubscribeForEvent("highlightElementInViewer");
+        this.emitter.unsubscribeForEvent("removeHighlightElementInViewer");
         this.emitter.emit(levelNumberChangedEvent);
       });
     });

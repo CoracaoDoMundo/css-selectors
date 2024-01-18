@@ -7,6 +7,8 @@ import EventEmitter from "../event-emitter";
 import { RemoveHighlightElement } from "../../types/events/remove-highlight-element";
 import { HighlightElement } from "../../types/events/highlight-element";
 import { LevelNumberChanged } from "../../types/events/level-number-changed";
+import { HighlightBlanketElement } from "../../types/events/highlight-blanket-element";
+import { RemoveHighlightBlanketElement } from "../../types/events/remove-highlight-blanket-element";
 
 hljs.registerLanguage("xml", xml);
 
@@ -34,14 +36,14 @@ class Viewer {
   }
 
   public subscribeToHighlightElementEvent(event: Event): void {
-    if (event instanceof HighlightElement) {
+    if (event instanceof HighlightBlanketElement) {
       const elem = event.getElementIdent();
       this.highlightElementFromBlanketHover(elem);
     }
   }
 
   public subscribeToRemoveHighlightElementEvent(event: Event): void {
-    if (event instanceof RemoveHighlightElement) {
+    if (event instanceof RemoveHighlightBlanketElement) {
       const elem = event.getElementIdent();
       this.removeHighlightElementFromBlanketHover(elem);
     }
@@ -52,13 +54,13 @@ class Viewer {
     container.append(this.viewer);
     this.preBlock.classList.add("codeTextContainer");
     this.viewer.append(this.preBlock);
-    this.highlightElement();
+    // this.highlightElement();
     this.fillViewerField(activeLevel);
 
     this.emitter.subscribe("levelNumberChanged", (event) => {
-      this.subscribeToLevelChangedEvent(event);
       this.elements = [];
       this.elemSet = [];
+      this.subscribeToLevelChangedEvent(event);
     });
   }
 
@@ -185,15 +187,16 @@ class Viewer {
   public fillViewerField(activeLevel: number): void {
     this.preBlock.innerHTML = "";
     this.drawActiveLevel(this.preBlock, LevelsList[activeLevel]);
-    this.highlightElement();
+    // this.highlightElement();
     this.highlightLinkedElement();
     this.removeHighlightLinkedElement();
     this.emitter.subscribe("highlightElementInViewer", (event) =>
       this.subscribeToHighlightElementEvent(event)
     );
-    this.emitter.subscribe("removeHighlightElementFromViewer", (event) =>
+    this.emitter.subscribe("removeHighlightElementInViewer", (event) =>
       this.subscribeToRemoveHighlightElementEvent(event)
     );
+    this.highlightElement();
   }
 
   public personalizeElemSet(): void {
@@ -204,31 +207,30 @@ class Viewer {
   public highlightElement(): void {
     this.elements.forEach((item) => {
       item.addEventListener("mouseover", () => {
-        if (item.getAttribute("tag") !== "div Blanket") {
-          const elemIdent = item.getAttribute("item");
-          if (elemIdent) this.emitter.emit(new HighlightElement(elemIdent));
-          item.classList.add("highlight");
-          this.elements.forEach((elem) => {
-            if (
-              item.getAttribute("link") !== null &&
-              item.getAttribute("link") === elem.getAttribute("link")
-            ) {
-              elem.classList.add("highlight");
-            }
-            if (
-              item.nextSibling instanceof HTMLDivElement &&
-              item.nextSibling.classList.contains("childrenContainer")
-            ) {
-              item.nextSibling.classList.add("highlight");
-            }
-            if (
-              item.previousSibling instanceof HTMLDivElement &&
-              item.previousSibling.classList.contains("childrenContainer")
-            ) {
-              item.previousSibling.classList.add("highlight");
-            }
-          });
-        }
+        if (item.getAttribute("tag") === "div Blanket") return;
+        const elemIdent = item.getAttribute("item");
+        if (elemIdent) this.emitter.emit(new HighlightElement(elemIdent));
+        item.classList.add("highlight");
+        this.elements.forEach((elem) => {
+          if (
+            item.getAttribute("link") !== null &&
+            item.getAttribute("link") === elem.getAttribute("link")
+          ) {
+            elem.classList.add("highlight");
+          }
+          if (
+            item.nextSibling instanceof HTMLDivElement &&
+            item.nextSibling.classList.contains("childrenContainer")
+          ) {
+            item.nextSibling.classList.add("highlight");
+          }
+          if (
+            item.previousSibling instanceof HTMLDivElement &&
+            item.previousSibling.classList.contains("childrenContainer")
+          ) {
+            item.previousSibling.classList.add("highlight");
+          }
+        });
       });
     });
     this.elements.forEach((item) => {

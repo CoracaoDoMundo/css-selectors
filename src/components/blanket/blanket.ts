@@ -7,6 +7,8 @@ import EventEmitter from "../event-emitter";
 import { HighlightElement } from "../../types/events/highlight-element";
 import { RemoveHighlightElement } from "../../types/events/remove-highlight-element";
 import { LevelNumberChanged } from "../../types/events/level-number-changed";
+import { HighlightBlanketElement } from "../../types/events/highlight-blanket-element";
+import { RemoveHighlightBlanketElement } from "../../types/events/remove-highlight-blanket-element";
 
 class Blanket {
   public blanket: HTMLDivElement = document.createElement("div");
@@ -28,6 +30,10 @@ class Blanket {
     this.blanket.classList.add("blanket");
     this.blanket.style.backgroundImage = `url(${blanket})`;
     container.append(this.blanket);
+    this.emitter.subscribe("levelNumberChanged", (event) => {
+      this.items = [];
+      this.subscribeToLevelChangedEvent(event);
+    });
   }
 
   public subscribeToLevelChangedEvent(event: Event): void {
@@ -109,10 +115,6 @@ class Blanket {
   }
 
   public subscribes(): void {
-    this.emitter.subscribe("levelNumberChanged", (event) => {
-      this.subscribeToLevelChangedEvent(event);
-      this.items = [];
-    });
     this.emitter.subscribe("highlightElement", (event) =>
       this.subscribeToHighlightElementEvent(event)
     );
@@ -128,20 +130,23 @@ class Blanket {
   }
 
   public highlightElement(): void {
-    this.items.forEach((item) => {
+    this.items.forEach((item, i) => {
       item[0].addEventListener("mouseover", (e) => {
         item[0].classList.add("shadow");
-        // const highlightElementEvent = new HighlightElement(i, item[0]);
-        // this.emitter.emit(highlightElementEvent);
+        const highlightElementEvent = new HighlightBlanketElement(`${i}`);
+        this.emitter.emit(highlightElementEvent);
         if (e.relatedTarget instanceof HTMLDivElement) {
           e.relatedTarget.classList.remove("shadow");
         }
       });
     });
-    this.items.forEach((item) => {
+    this.items.forEach((item, i) => {
       item[0].addEventListener("mouseout", () => {
-        // const removeHighlightElementEvent = new RemoveHighlightElement(i, item[0]);
-        // this.emitter.emit(removeHighlightElementEvent);
+        const removeHighlightElementEvent = new RemoveHighlightBlanketElement(
+          `${i}`
+        );
+        this.emitter.emit(removeHighlightElementEvent);
+
         item[0].classList.remove("shadow");
       });
     });
@@ -150,6 +155,20 @@ class Blanket {
   public personalizeItems(): void {
     this.items.map((el, i) => el[0].setAttribute("item", `${i}`));
   }
+
+  // public showTooltip(
+  //   item: [HTMLDivElement, string],
+  //   tooltipVisible: boolean
+  // ): [boolean, HTMLDivElement?] {
+  //   let tooltipNewVisibility = tooltipVisible;
+  //   if (!tooltipNewVisibility) {
+  //     tooltipNewVisibility = true;
+  //     const tooltip = createElement("div", ["tooltip"], item[0], item[1]);
+  //   }
+  //   return [tooltipNewVisibility, tooltip];
+  // }
+
+  // public hideTooltip(item: [], tooltipVisible: boolean): void {}
 
   public addTooltipOnElement(): void {
     this.items.forEach((item) => {
