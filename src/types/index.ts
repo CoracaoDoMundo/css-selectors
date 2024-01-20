@@ -41,8 +41,6 @@ export type CbDrawOrChangeLevel = (levelNum: number) => void;
 
 export type CbHighlightOrRemoveLinkedElement = (value: string) => void;
 
-// export type CbHighlightOrRemoveElement = (value: HTMLDivElement) => void;
-
 export type CbFillViewerField = (activeLevel: number) => void;
 
 export type CallbackEvent = {

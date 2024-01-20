@@ -38,14 +38,14 @@ class Viewer {
   public subscribeToHighlightElementEvent(event: Event): void {
     if (event instanceof HighlightBlanketElement) {
       const elem = event.getElementIdent();
-      this.highlightElementFromBlanketHover(elem);
+      this.highlighElementFromBlanket(elem, "highlight");
     }
   }
 
   public subscribeToRemoveHighlightElementEvent(event: Event): void {
     if (event instanceof RemoveHighlightBlanketElement) {
       const elem = event.getElementIdent();
-      this.removeHighlightElementFromBlanketHover(elem);
+      this.highlighElementFromBlanket(elem);
     }
   }
 
@@ -278,10 +278,10 @@ class Viewer {
     });
   }
 
-  public highlightElementFromBlanketHover(item: string): void {
+  public highlighElementFromBlanket(item: string, action?: string): void {
     let link: string | null;
     this.elemSet.forEach((el) => {
-      if (el.getAttribute("item") === item) {
+      if (el.getAttribute("item") === item && action === "highlight") {
         el.classList.add("highlight");
         if (el.getAttribute("link")) {
           link = el.getAttribute("link");
@@ -291,14 +291,7 @@ class Viewer {
             elem.classList.add("highlight");
           }
         });
-      }
-    });
-  }
-
-  public removeHighlightElementFromBlanketHover(item: string): void {
-    let link: string | null;
-    this.elemSet.forEach((el) => {
-      if (el.getAttribute("item") === item) {
+      } else if (el.getAttribute("item") === item) {
         el.classList.remove("highlight");
         if (el.getAttribute("link")) {
           link = el.getAttribute("link");

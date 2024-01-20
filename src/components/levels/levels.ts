@@ -22,17 +22,16 @@ class Levels {
 
   public markClassName = "mark";
 
+  private levelFromStorage = Number(localStorage.getItem("coracaoLevel"));
+
   constructor() {
     this.emitter = EventEmitter.getInstance();
     this.resetBtn = document.createElement("div");
     this.helpBtn = document.createElement("div");
-    if (
-      localStorage.getItem("coracaoLevel") === null ||
-      localStorage.getItem("coracaoLevel") === undefined
-    ) {
+    if (this.levelFromStorage === null || this.levelFromStorage === undefined) {
       this.activeLevel = 0;
     } else {
-      this.activeLevel = Number(localStorage.getItem("coracaoLevel"));
+      this.activeLevel = this.levelFromStorage;
     }
   }
 
@@ -43,11 +42,8 @@ class Levels {
   }
 
   public restoreLocalStorage(): void {
-    if (
-      Number(localStorage.getItem("coracaoLevel")) > 0 &&
-      Number(localStorage.getItem("coracaoLevel")) < 11
-    ) {
-      this.activeLevel = Number(localStorage.getItem("coracaoLevel"));
+    if (this.levelFromStorage > 0 && this.levelFromStorage < 11) {
+      this.activeLevel = this.levelFromStorage;
     }
   }
 
@@ -127,7 +123,9 @@ class Levels {
   public addListenerOnLevelsList(): void {
     this.levelItems.forEach((el, i) => {
       el.addEventListener("click", () => {
-        this.levelItems.map((item) => item.classList.remove("activeListItem"));
+        this.levelItems.forEach((item) =>
+          item.classList.remove("activeListItem")
+        );
         el.classList.add("activeListItem");
         this.activeLevel = i;
         this.setLocalStorage();

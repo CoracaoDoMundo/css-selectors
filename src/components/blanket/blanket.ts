@@ -125,7 +125,8 @@ class Blanket {
 
   public elementsDisappearance(): void {
     this.items.forEach((el) => {
-      el[0].classList.add("fly");
+      const elementDiv = el[0];
+      elementDiv.classList.add("fly");
     });
   }
 
@@ -153,7 +154,10 @@ class Blanket {
   }
 
   public personalizeItems(): void {
-    this.items.map((el, i) => el[0].setAttribute("item", `${i}`));
+    this.items.forEach((el, i) => {
+      const elementDiv = el[0];
+      elementDiv.setAttribute("item", `${i}`);
+    });
   }
 
   public addTooltipOnElement(): void {
@@ -186,12 +190,14 @@ class Blanket {
   public highlightLinkedElement(value: string): void {
     let res: number;
     this.items.forEach((el, i) => {
-      if (el[0].getAttribute("item") === value) {
+      const elementDiv = el[0];
+      const elementTag = el[1];
+      if (elementDiv.getAttribute("item") === value) {
         res = i;
         this.items[res][0].classList.add("shadow");
         if (!this.tooltipVisible) {
           this.tooltipVisible = true;
-          createElement("div", ["tooltip"], el[0], el[1]);
+          createElement("div", ["tooltip"], elementDiv, elementTag);
         }
       }
     });
@@ -201,9 +207,11 @@ class Blanket {
     let res: number;
     let lastChild: HTMLDivElement;
     this.items.forEach((el, i) => {
-      if (el[0].getAttribute("item") === value) {
+      const elementDiv = el[0];
+      if (elementDiv.getAttribute("item") === value) {
         res = i;
-        this.items[res][0].classList.remove("shadow");
+        const selectedElementDiv = this.items[res][0];
+        selectedElementDiv.classList.remove("shadow");
         lastChild = this.items[res][0].lastChild as HTMLDivElement;
         if (lastChild && lastChild.className === "tooltip") {
           this.items[res][0].removeChild(lastChild);
