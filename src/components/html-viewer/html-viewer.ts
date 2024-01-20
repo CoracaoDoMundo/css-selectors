@@ -201,6 +201,59 @@ class Viewer {
     this.elemSet.map((el, i) => el.setAttribute("item", `${i}`));
   }
 
+  public highlightSiblings(
+    element: HTMLDivElement,
+    item: HTMLDivElement
+  ): void {
+    if (
+      item.getAttribute("link") !== null &&
+      item.getAttribute("link") === element.getAttribute("link")
+    ) {
+      element.classList.add("highlight");
+      const pairElemIdent = element.getAttribute("item");
+      if (pairElemIdent) this.emitter.emit(new HighlightElement(pairElemIdent));
+    }
+    if (
+      item.nextSibling instanceof HTMLDivElement &&
+      item.nextSibling.classList.contains("childrenContainer")
+    ) {
+      item.nextSibling.classList.add("highlight");
+    }
+    if (
+      item.previousSibling instanceof HTMLDivElement &&
+      item.previousSibling.classList.contains("childrenContainer")
+    ) {
+      item.previousSibling.classList.add("highlight");
+    }
+  }
+
+  public removeHighlightFromSiblings(
+    element: HTMLDivElement,
+    item: HTMLDivElement
+  ): void {
+    if (
+      item.getAttribute("link") !== null &&
+      item.getAttribute("link") === element.getAttribute("link")
+    ) {
+      element.classList.remove("highlight");
+      const pairElemIdent = element.getAttribute("item");
+      if (pairElemIdent)
+        this.emitter.emit(new RemoveHighlightElement(pairElemIdent));
+    }
+    if (
+      item.nextSibling instanceof HTMLDivElement &&
+      item.nextSibling.classList.contains("childrenContainer")
+    ) {
+      item.nextSibling.classList.remove("highlight");
+    }
+    if (
+      item.previousSibling instanceof HTMLDivElement &&
+      item.previousSibling.classList.contains("childrenContainer")
+    ) {
+      item.previousSibling.classList.remove("highlight");
+    }
+  }
+
   public highlightElement(): void {
     this.elements.forEach((item) => {
       item.addEventListener("mouseover", () => {
@@ -209,24 +262,7 @@ class Viewer {
         if (elemIdent) this.emitter.emit(new HighlightElement(elemIdent));
         item.classList.add("highlight");
         this.elements.forEach((elem) => {
-          if (
-            item.getAttribute("link") !== null &&
-            item.getAttribute("link") === elem.getAttribute("link")
-          ) {
-            elem.classList.add("highlight");
-          }
-          if (
-            item.nextSibling instanceof HTMLDivElement &&
-            item.nextSibling.classList.contains("childrenContainer")
-          ) {
-            item.nextSibling.classList.add("highlight");
-          }
-          if (
-            item.previousSibling instanceof HTMLDivElement &&
-            item.previousSibling.classList.contains("childrenContainer")
-          ) {
-            item.previousSibling.classList.add("highlight");
-          }
+          this.highlightSiblings(elem, item);
         });
       });
     });
@@ -236,24 +272,7 @@ class Viewer {
         if (elemIdent) this.emitter.emit(new RemoveHighlightElement(elemIdent));
         item.classList.remove("highlight");
         this.elements.forEach((elem) => {
-          if (
-            item.getAttribute("link") !== null &&
-            item.getAttribute("link") === elem.getAttribute("link")
-          ) {
-            elem.classList.remove("highlight");
-          }
-          if (
-            item.nextSibling instanceof HTMLDivElement &&
-            item.nextSibling.classList.contains("childrenContainer")
-          ) {
-            item.nextSibling.classList.remove("highlight");
-          }
-          if (
-            item.previousSibling instanceof HTMLDivElement &&
-            item.previousSibling.classList.contains("childrenContainer")
-          ) {
-            item.previousSibling.classList.remove("highlight");
-          }
+          this.removeHighlightFromSiblings(elem, item);
         });
       });
     });

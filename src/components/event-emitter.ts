@@ -22,22 +22,7 @@ class EventEmitter {
   ): void {
     const existingHandlers = this.eventHandlers.get(eventName) || [];
     this.eventHandlers.set(eventName, [...existingHandlers, eventHandler]);
-    // console.log(
-    //   "EVENT NAME:",
-    //   eventName
-    //   "HANDLERS QUANTITY:",
-    //   this.eventHandlers.get(eventName)!.length
-    // );
-    // console.log("added handler:", eventHandler);
-    // console.log("the handlers:", this.eventHandlers.get(eventName));
   }
-
-  // public unsubscribe(
-  //   eventName: string,
-  //   eventHandler: (event: Event) => void
-  // ): void {
-  //   this.eventHandlers.delete(eventHandler.name);
-  // }
 
   public unsubscribeForEvent(eventName: string): void {
     this.eventHandlers.delete(eventName);
@@ -50,7 +35,6 @@ class EventEmitter {
       .map((char, index) => (index === 0 ? newStartLetter : char))
       .join("");
     const handlersToCall = this.eventHandlers.get(eventName);
-    // console.log("EVENT NAME:", eventName, "HANDLERS:", handlersToCall);
     if (handlersToCall) {
       handlersToCall.forEach((handler) => handler(event));
     }
