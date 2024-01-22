@@ -31,7 +31,12 @@ export interface Level {
   child?: Level[];
 }
 
-export interface Event {}
+export interface Event {
+  elementIdent?: string;
+  hint?: boolean;
+  newNumber?: number;
+  newCurrentLevel?: number;
+}
 
 export type Cb = (event: Event) => void;
 
