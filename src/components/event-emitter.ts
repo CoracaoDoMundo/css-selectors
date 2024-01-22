@@ -29,12 +29,7 @@ class EventEmitter {
   }
 
   public emit(event: Event): void {
-    const newStartLetter = event.constructor.name.split("")[0].toLowerCase();
-    const eventName = event.constructor.name
-      .split("")
-      .map((char, index) => (index === 0 ? newStartLetter : char))
-      .join("");
-    const handlersToCall = this.eventHandlers.get(eventName);
+    const handlersToCall = this.eventHandlers.get(event.name);
     if (handlersToCall) {
       handlersToCall.forEach((handler) => handler(event));
     }

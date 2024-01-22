@@ -32,10 +32,7 @@ export interface Level {
 }
 
 export interface Event {
-  elementIdent?: string;
-  hint?: boolean;
-  newNumber?: number;
-  newCurrentLevel?: number;
+  name: string;
 }
 
 export type Cb = (event: Event) => void;

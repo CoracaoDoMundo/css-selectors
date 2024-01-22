@@ -5,6 +5,8 @@ export class ResetGame implements Event {
 
   public solvedLevels = 0;
 
+  public name = "resetGame";
+
   public getLevelNumber(): number {
     return this.newCurrentLevel;
   }
